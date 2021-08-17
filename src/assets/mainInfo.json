@@ -1,0 +1,35 @@
+{
+  "costsMainInfo": [
+    {
+      "sum": "0.00",
+      " ": "day",
+      "title": "День"
+    },
+    {
+      "sum": "0.00",
+      "name": "week",
+      "title": "Неделя"
+    },
+    {
+      "sum": "0.00",
+      "name": "month",
+      "title": "Месяц"
+    }
+  ],
+
+  "incomesMainInfo": [
+    {
+      "sum": "0.00",
+      "name": "month",
+      "title": "Месяц"
+    }
+  ],
+
+  "balanceMainInfo": [
+    {
+      "sum": "0.00",
+      "name": "allTime  ",
+      "title": "Всё время"
+    }
+  ]
+}
