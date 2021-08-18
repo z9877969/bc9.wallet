@@ -1,3 +1,5 @@
+import DatePaginator from "../DatePaginator/DatePaginator";
+import HistoryTable from "../HistoryTable/HistoryTable";
 import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
 import LabelInput from "../_share/LabelInput/LabelInput";
 import Section from "../_share/Section/Section";
@@ -28,30 +30,8 @@ const TransactionsHistoryPage = () => {
         <LabelInput type="button" name="selectPeriod" value={"День"} />
         <button type="button">diagram icon</button>
       </GoBackHeader>
-      <button type="button">prev</button>
-      <LabelInput type="date" title="17 августа 2021" />
-      <button type="button">next</button>
-      <table>
-        <thead>
-          <tr>
-            <th>Всего:</th>
-            <th>{allSum}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dataCatList.map(({ name, title, sum }) => (
-            <tr key={name}>
-              <td>{title}</td>
-              <td>
-                <span>{sum}</span>
-                <button name={name} type="button">
-                  {"=>"}
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DatePaginator />
+      <HistoryTable allSum={allSum} dataCatList={dataCatList} />
     </Section>
   );
 };
