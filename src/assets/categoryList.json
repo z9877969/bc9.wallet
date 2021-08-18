@@ -1,0 +1,26 @@
+{
+  "costsCategoryList": [
+    {
+      "title": "Еда",
+      "name": "food"
+    },
+    {
+      "title": "Напитки",
+      "name": "drinks"
+    },
+    {
+      "title": "Разное",
+      "name": "other"
+    }
+  ],
+  "incomesCategoryList": [
+    {
+      "title": "Зарплата",
+      "name": "salary"
+    },
+    {
+      "title": "Премия",
+      "name": "bonus"
+    }
+  ]
+}
