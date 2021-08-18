@@ -1,19 +1,30 @@
-import s from "./MainInfo.module.css";
+import s from "./MainInfo.module.scss";
+import sprite from "../../assets/icons/symbol-defs.svg";
 
-const MainInfo = ({ title, periodsOpts }) => {
+console.log(sprite);
+
+const MainInfo = ({ title, periodsOpts, titleColor, buttonIcon }) => {
   return (
     <section className={s.section}>
-      <h2 className={s.title}>{title}</h2>
-      <p className={s.currency}>USD</p>
-      <button className={s.button}>Add</button>
-      <ul className={s.list}>
-        {periodsOpts.map(({ title, sum, name }) => (
-          <li key={name} className={s.item}>
-            <span className={s.period}>{title}</span>
-            <span className={s.sum}>{sum}</span>
-          </li>
-        ))}
-      </ul>
+      <div className={s.wrapper}>
+        <div className={s.header}>
+          <h2 className={`${s.title} ${s[titleColor]}`}>{title}</h2>
+          <p className={s.currency}>USD</p>
+        </div>
+        <ul className={s.list}>
+          {periodsOpts.map(({ title, sum, name }) => (
+            <li key={name} className={s.item}>
+              <span className={s.period}>{title}</span>
+              <span className={s.sum}>{sum}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <button className={`${s.button} ${s[titleColor]}`}>
+        <svg className={s.icon}>
+          <use href={`${sprite}#${buttonIcon}`}></use>
+        </svg>
+      </button>
     </section>
   );
 };
