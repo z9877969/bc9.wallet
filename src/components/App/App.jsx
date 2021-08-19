@@ -7,8 +7,9 @@ import MenuList from "../MenuList/MenuList";
 const App = () => {
   return (
     <>
-      <MainPage />
-      {/* <TransactionPage /> */}
+      {null}
+      {/* <MainPage /> */}
+      <TransactionPage />
       {/* <CategoryListPage /> */}
       {/* <TransactionsHistoryPage />
       <MenuList /> */}

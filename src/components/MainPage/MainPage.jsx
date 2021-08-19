@@ -1,4 +1,4 @@
-import BaseSection from "../BaseSection/BaseSection";
+import BaseSection from "../_share/BaseSection/BaseSection";
 import MainInfo from "../MainInfo/MainInfo";
 import ButtonsToHistory from '../ButtonsToHistory/ButtonsToHistory';
 import {
