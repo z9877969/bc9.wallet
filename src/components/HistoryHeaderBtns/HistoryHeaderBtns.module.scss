@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.labelBt {
+  width: 40%;
+  & input {
+    background: none;
+    border: none;
+    text-align: left;
+    background-image: url(../../assets/icons/play.svg);
+    background-repeat: no-repeat;
+    background-size: 15px;
+    background-position: right center;
+
+    // &::before {
+    //   content: "\25BC";
+    //   width: 5px;
+    //   height: 5px;
+    // }
+  }
+}
