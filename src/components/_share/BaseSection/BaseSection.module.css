@@ -1,0 +1,16 @@
+.section {
+  height: 100vh;
+  background-color: rgb(230, 213, 213);
+}
+
+.title {
+  background-color: coral;
+  padding: 15px;
+}
+
+.container {
+  width: 500px;
+  margin: 0 auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}

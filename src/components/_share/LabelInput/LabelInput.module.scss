@@ -1,0 +1,19 @@
+.label {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  width: 45%;
+}
+
+.label:nth-child(n + 3) {
+  width: 100%;
+}
+
+.title {
+  margin-bottom: 5px;
+  padding-left: 8px;
+  font-size: 14px;
+  color: grey;
+}

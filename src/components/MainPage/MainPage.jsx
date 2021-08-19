@@ -1,5 +1,6 @@
-import BaseSection from "../BaseSection/BaseSection";
+import BaseSection from "../_share/BaseSection/BaseSection";
 import MainInfo from "../MainInfo/MainInfo";
+import ButtonsToHistory from '../ButtonsToHistory/ButtonsToHistory';
 import {
   incomesMainInfo,
   costsMainInfo,
@@ -27,8 +28,7 @@ const MainPage = () => {
         titleColor="balance"
         buttonIcon="icon-navigation-more"
       />
-      <button type="button">Все расходы</button>
-      <button type="button">Все доходы</button>
+      <ButtonsToHistory />
     </BaseSection>
   );
 };
