@@ -3,6 +3,8 @@ import HistoryTable from "../HistoryTable/HistoryTable";
 import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
 import LabelInput from "../_share/LabelInput/LabelInput";
 import Section from "../_share/Section/Section";
+import BaseSection from "../_share/BaseSection/BaseSection";
+import HistoryHeaderBtns from "../HistoryHeaderBtns/HistoryHeaderBtns";
 
 const dataCatList = [
   {
@@ -25,14 +27,13 @@ const dataCatList = [
 const TransactionsHistoryPage = () => {
   const allSum = dataCatList.reduce((acc, { sum }) => acc + Number(sum), 0);
   return (
-    <Section>
+    <BaseSection>
       <GoBackHeader>
-        <LabelInput type="button" name="selectPeriod" value={"День"} />
-        <button type="button">diagram icon</button>
+        <HistoryHeaderBtns />
       </GoBackHeader>
       <DatePaginator />
       <HistoryTable allSum={allSum} dataCatList={dataCatList} />
-    </Section>
+    </BaseSection>
   );
 };
 

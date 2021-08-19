@@ -7,12 +7,11 @@ import MenuList from "../MenuList/MenuList";
 const App = () => {
   return (
     <>
-      {null}
       {/* <MainPage /> */}
-      <TransactionPage />
+      {/* <TransactionPage /> */}
       {/* <CategoryListPage /> */}
-      {/* <TransactionsHistoryPage />
-      <MenuList /> */}
+      <TransactionsHistoryPage />
+      {/* <MenuList /> */}
     </>
   );
 };

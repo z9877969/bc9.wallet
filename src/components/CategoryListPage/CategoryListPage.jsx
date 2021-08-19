@@ -1,5 +1,9 @@
 import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
 import Section from "../_share/Section/Section";
+import BaseSection from "../_share/BaseSection/BaseSection";
+import AddCategoryForm from "../AddCategoryForm/AddCategoryForm";
+import CategoryList from "../CategoryList/CategoryList";
+
 import {
   costsCategoryList,
   incomesCategoryList,
@@ -7,19 +11,11 @@ import {
 
 const CategoryListPage = () => {
   return (
-    <Section>
+    <BaseSection>
       <GoBackHeader title={"Расходы"} />
-      <ul>
-        {costsCategoryList.map((el) => (
-          <li key={el.name}>
-            <span>{el.title}</span>
-            <button name={el.name} type="button">
-              ...
-            </button>
-          </li>
-        ))}
-      </ul>
-    </Section>
+      <CategoryList categoryList={costsCategoryList} />
+      <AddCategoryForm />
+    </BaseSection>
   );
 };
 
