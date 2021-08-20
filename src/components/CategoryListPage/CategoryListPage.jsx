@@ -9,11 +9,22 @@ import {
   incomesCategoryList,
 } from "../../assets/categoryList.json";
 
-const CategoryListPage = () => {
+const CategoryListPage = ({
+  handleToggleCatList,
+  handleSetCategory,
+  transType,
+}) => {
+  
+  const categoryList =
+    transType === "incomes" ? incomesCategoryList : costsCategoryList;
+
   return (
     <BaseSection>
-      <GoBackHeader title={"Расходы"} />
-      <CategoryList categoryList={costsCategoryList} />
+      <GoBackHeader title={"Расходы"} handleGoBack={handleToggleCatList} />
+      <CategoryList
+        categoryList={categoryList}
+        handleSetCategory={handleSetCategory}
+      />
       <AddCategoryForm />
     </BaseSection>
   );

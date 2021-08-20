@@ -24,11 +24,11 @@ const dataCatList = [
   },
 ];
 
-const TransactionsHistoryPage = () => {
+const TransactionsHistoryPage = ({ handleReturnToMainPage, dataCatList }) => {
   const allSum = dataCatList.reduce((acc, { sum }) => acc + Number(sum), 0);
   return (
     <BaseSection>
-      <GoBackHeader>
+      <GoBackHeader handleGoBack={handleReturnToMainPage}>
         <HistoryHeaderBtns />
       </GoBackHeader>
       <DatePaginator />

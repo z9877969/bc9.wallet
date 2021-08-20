@@ -7,19 +7,31 @@ const LabelInput = ({
   value,
   placeholder,
   className,
+  cbOnChange,
+  cbOnClick,
 }) => {
   return (
     <label className={`${s.label} ${className && className}`}>
       {/* {title && <p className={s.title}>{title}</p>} */}
       {title}
-      <input
-        className={s.input}
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={() => {}}
-      />
+      {cbOnChange ? (
+        <input
+          className={s.input}
+          type={type}
+          name={name}
+          placeholder={placeholder}
+          value={value}
+          onChange={cbOnChange}
+        />
+      ) : (
+        <input
+          className={s.input}
+          type={type}
+          name={name}
+          value={value}
+          onClick={cbOnClick}
+        />
+      )}
     </label>
   );
 };

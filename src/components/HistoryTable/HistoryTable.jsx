@@ -8,9 +8,9 @@ const HistoryTable = ({ allSum, dataCatList }) => {
                 </tr>
             </thead>
             <tbody>
-                {dataCatList.map(({ name, title, sum }) => (
+                {dataCatList.map(({ name, category, sum }) => (
                     <tr key={name}>
-                        <td>{title}</td>
+                        <td>{category}</td>
                         <td>
                             <span>{sum}</span>
                             <button name={name} type="button">
