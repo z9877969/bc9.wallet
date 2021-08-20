@@ -2,8 +2,6 @@ import PropTypes from "prop-types";
 import s from "./MainInfo.module.scss";
 import sprite from "../../assets/icons/symbol-defs.svg";
 
-console.log(sprite);
-
 const MainInfo = ({
   title,
   periodsOpts,

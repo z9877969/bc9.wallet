@@ -8,8 +8,8 @@ const HistoryTable = ({ allSum, dataCatList }) => {
                 </tr>
             </thead>
             <tbody>
-                {dataCatList.map(({ name, category, sum }) => (
-                    <tr key={name}>
+                {dataCatList.map(({ name, category, sum, id }) => (
+                    <tr key={id}>
                         <td>{category}</td>
                         <td>
                             <span>{sum}</span>
