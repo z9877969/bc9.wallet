@@ -1,4 +1,4 @@
-const menuList = [{
+const menuListDefault = [{
     name: "delete",
     title: "Удалить"
 },
@@ -9,7 +9,7 @@ const menuList = [{
 ]
 
 
-const MenuList = () => {
+const MenuList = ({menuList = menuListDefault}) => {
     return (
         <ul className="">
             {menuList.map(({ name, title }) =>
