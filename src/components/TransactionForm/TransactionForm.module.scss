@@ -10,10 +10,12 @@
     padding-left: 10px;
     padding-right: 10px;
 
-    &:nth-last-child(-n + 6) {
+    &:nth-last-child(n + 3) {
       padding-bottom: 15px;
       border-bottom: 1px solid darkgray;
     }
+
+    &las
 
     & > [type="button"] {
       padding: 5px 10px;

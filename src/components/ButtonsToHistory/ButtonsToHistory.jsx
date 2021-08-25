@@ -2,7 +2,7 @@ import s from "./ButtonsToHistory.module.scss";
 
 const ButtonsToHistory = ({ handleOpenTransaction }) => {
   return (
-    <>
+    <div className={s.container}>
       <button
         onClick={() => handleOpenTransaction("costsHistory")}
         className={s.button}
@@ -17,7 +17,7 @@ const ButtonsToHistory = ({ handleOpenTransaction }) => {
       >
         Все доходы
       </button>
-    </>
+    </div>
   );
 };
 
