@@ -1,9 +1,7 @@
 import { Component } from "react";
 import MainPage from "../MainPage/MainPage";
 import TransactionPage from "../TransactionPage/TransactionPage";
-import CategoryListPage from "../CategoryListPage/CategoryListPage";
 import TransactionsHistoryPage from "../TransactionsHistoryPage/TransactionsHistoryPage";
-import MenuList from "../MenuList/MenuList";
 import BalancePage from "../BalancePage/BalancePage";
 
 class App extends Component {
@@ -12,6 +10,22 @@ class App extends Component {
     costs: [],
     incomes: [],
   };
+
+  componentDidMount() {
+    localStorage.getItem("costs") &&
+      this.setState({ costs: JSON.parse(localStorage.getItem("costs")) });
+    localStorage.getItem("incomes") &&
+      this.setState({ incomes: JSON.parse(localStorage.getItem("incomes")) });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.costs !== this.state.costs) {
+      localStorage.setItem("costs", JSON.stringify(this.state.costs));
+    }
+    if (prevState.incomes !== this.state.incomes) {
+      localStorage.setItem("incomes", JSON.stringify(this.state.incomes));
+    }
+  }
 
   handleOpenTransaction = (mainInfoType) => {
     this.setState({ mainInfoType: mainInfoType });
@@ -77,24 +91,24 @@ class App extends Component {
         );
     }
 
-    return (
-      <>
-        {!mainInfoType ? (
-          <>
-            <MainPage handleOpenTransaction={this.handleOpenTransaction} />
-          </>
-        ) : mainInfoType === "balance" ? (
-          <BalancePage handleReturnToMainPage={this.handleReturnToMainPage} />
-        ) : (
-          <TransactionPage
-            handleReturnToMainPage={this.handleReturnToMainPage}
-          />
-        )}
-        <TransactionsHistoryPage />
+    // return (
+    //   <>
+    //     {!mainInfoType ? (
+    //       <>
+    //         <MainPage handleOpenTransaction={this.handleOpenTransaction} />
+    //       </>
+    //     ) : mainInfoType === "balance" ? (
+    //       <BalancePage handleReturnToMainPage={this.handleReturnToMainPage} />
+    //     ) : (
+    //       <TransactionPage
+    //         handleReturnToMainPage={this.handleReturnToMainPage}
+    //       />
+    //     )}
+    //     <TransactionsHistoryPage />
 
-        {/* <MenuList /> */}
-      </>
-    );
+    //     {/* <MenuList /> */}
+    //   </>
+    // );
   }
 }
 
