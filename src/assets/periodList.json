@@ -1,0 +1,17 @@
+ [{
+    "name": "day",
+    "title": "День"
+},
+{
+    "name": "week",
+    "title": "Неделя"
+},
+{
+    "name": "month",
+    "title": "Месяц"
+},
+{
+    "name": "year",
+    "title": "Год"
+}
+]
