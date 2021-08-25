@@ -1,24 +1,30 @@
-const menuListDefault = [{
+const menuListDefault = [
+  {
     name: "delete",
-    title: "Удалить"
-},
-{
+    title: "Удалить",
+  },
+  {
     name: "edit",
-    title: "Переименовать"
-}
-]
+    title: "Переименовать",
+  },
+];
 
-
-const MenuList = ({menuList = menuListDefault}) => {
-    return (
-        <ul className="">
-            {menuList.map(({ name, title }) =>
-                <li key={name} >
-                    <button type="button" name={name}>{title}</button>
-                </li>
-            )}
-        </ul>
-    );
-}
+const MenuList = ({ menuList = menuListDefault, onChangeTouchedPeriod }) => {
+  return (
+    <ul className="">
+      {menuList.map(({ name, title }) => (
+        <li key={name}>
+          <button
+            type="button"
+            name={name}
+            onClick={() => onChangeTouchedPeriod({ name, title })}
+          >
+            {title}
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+};
 
 export default MenuList;
