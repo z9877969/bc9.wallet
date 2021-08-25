@@ -1,11 +1,23 @@
-import s from './ButtonsToHistory.module.scss';
+import s from "./ButtonsToHistory.module.scss";
 
-const ButtonsToHistory = () => {
+const ButtonsToHistory = ({ handleOpenTransaction }) => {
   return (
-    <>
-      <button className={s.button} type="button">Все расходы</button>
-      <button className={s.button} type="button">Все доходы</button>
-    </>
+    <div className={s.container}>
+      <button
+        onClick={() => handleOpenTransaction("costsHistory")}
+        className={s.button}
+        type="button"
+      >
+        Все расходы
+      </button>
+      <button
+        onClick={() => handleOpenTransaction("incomesHistory")}
+        className={s.button}
+        type="button"
+      >
+        Все доходы
+      </button>
+    </div>
   );
 };
 

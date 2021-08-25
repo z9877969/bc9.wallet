@@ -1,13 +1,15 @@
 import { List, Item } from "./CategoriListStyle";
 import sprite from "../../assets/icons/symbol-defs.svg";
 
-const CategoryList = ({ categoryList }) => {
+const CategoryList = ({ categoryList, handleSetCategory }) => {
   return (
     <List>
-      {categoryList.map((el) => (
-        <Item key={el.name}>
-          <span>{el.title}</span>
-          <button name={el.name} type="button">
+      {categoryList.map(({ title, name }) => (
+        <Item key={name}>
+          <button type="button" onClick={() => handleSetCategory(title)}>
+            {title}
+          </button>
+          <button name={name} type="button" className="button">
             <svg>
               <use href={sprite + "#icon-navigation-more"}></use>
             </svg>

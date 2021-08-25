@@ -11,14 +11,17 @@ export const Item = styled.li`
   padding: 5px 0;
 
   button {
+    background: none;
+    border: none;
+  }
+
+  .button {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0px;
     font-size: 18px;
-    font-weight: 800;
-    background: none;
-    border: none;
+    font-weight: 800; 
     transform: rotate(90deg);
     text-align: center;
   }
