@@ -1,42 +1,42 @@
-import { Component } from "react";
-import MainPage from "../MainPage/MainPage";
-import TransactionPage from "../TransactionPage/TransactionPage";
-import TransactionsHistoryPage from "../TransactionsHistoryPage/TransactionsHistoryPage";
-import BalancePage from "../BalancePage/BalancePage";
+import { Component } from 'react';
+import MainPage from '../MainPage/MainPage';
+import TransactionPage from '../TransactionPage/TransactionPage';
+import TransactionsHistoryPage from '../TransactionsHistoryPage/TransactionsHistoryPage';
+import BalancePage from '../BalancePage/BalancePage';
 
 class App extends Component {
   state = {
-    mainInfoType: "",
+    mainInfoType: '',
     costs: [],
     incomes: [],
   };
 
   componentDidMount() {
-    localStorage.getItem("costs") &&
-      this.setState({ costs: JSON.parse(localStorage.getItem("costs")) });
-    localStorage.getItem("incomes") &&
-      this.setState({ incomes: JSON.parse(localStorage.getItem("incomes")) });
+    localStorage.getItem('costs') &&
+      this.setState({ costs: JSON.parse(localStorage.getItem('costs')) });
+    localStorage.getItem('incomes') &&
+      this.setState({ incomes: JSON.parse(localStorage.getItem('incomes')) });
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.costs !== this.state.costs) {
-      localStorage.setItem("costs", JSON.stringify(this.state.costs));
+      localStorage.setItem('costs', JSON.stringify(this.state.costs));
     }
     if (prevState.incomes !== this.state.incomes) {
-      localStorage.setItem("incomes", JSON.stringify(this.state.incomes));
+      localStorage.setItem('incomes', JSON.stringify(this.state.incomes));
     }
   }
 
-  handleOpenTransaction = (mainInfoType) => {
+  handleOpenTransaction = mainInfoType => {
     this.setState({ mainInfoType: mainInfoType });
   };
 
   handleReturnToMainPage = () => {
-    this.setState({ mainInfoType: "" });
+    this.setState({ mainInfoType: '' });
   };
 
   handleAddTransaction = ({ transaction, transType }) => {
-    this.setState((prev) => ({
+    this.setState(prev => ({
       [transType]: [...prev[transType], transaction],
     }));
   };
@@ -45,11 +45,11 @@ class App extends Component {
     const { mainInfoType, costs, incomes } = this.state;
 
     switch (mainInfoType) {
-      case "balance":
+      case 'balance':
         return (
           <BalancePage handleReturnToMainPage={this.handleReturnToMainPage} />
         );
-      case "costs":
+      case 'costs':
         return (
           <>
             <TransactionPage
@@ -59,7 +59,7 @@ class App extends Component {
             />
           </>
         );
-      case "incomes":
+      case 'incomes':
         return (
           <TransactionPage
             transType="incomes"
@@ -67,17 +67,17 @@ class App extends Component {
             handleAddTransaction={this.handleAddTransaction}
           />
         );
-      case "costsHistory":
+      case 'costsHistory':
         return (
           <TransactionsHistoryPage
-            dataCatList={costs}
+            transactions={costs}
             handleReturnToMainPage={this.handleReturnToMainPage}
           />
         );
-      case "incomesHistory":
+      case 'incomesHistory':
         return (
           <TransactionsHistoryPage
-            dataCatList={incomes}
+            transactions={incomes}
             handleReturnToMainPage={this.handleReturnToMainPage}
           />
         );

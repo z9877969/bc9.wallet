@@ -111,7 +111,7 @@ class DataByPeriod {
   getDataByCat = data => {
     return data.reduce((acc, transaction) => {
       const { category: cat } = transaction;
-      const sum = Number(transaction.summ);
+      const sum = Number(transaction.sum);
       const category = typeof cat === 'object' ? cat.name : cat;
       if (!acc[category]) {
         acc[category] = { total: sum };
@@ -168,6 +168,8 @@ class DataByPeriod {
         return moment(date).format('LL');
       case this.periodsTypes.year:
         return this.splitFullDate(date).year;
+      default:
+        return;
     }
   };
 
