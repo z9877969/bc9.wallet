@@ -4,11 +4,12 @@ import BaseSection from "../_share/BaseSection/BaseSection";
 import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
 import TransactionForm from "../TransactionForm/TransactionForm";
 import CategoryListPage from "../CategoryListPage/CategoryListPage";
+import dateApi from '../../utils/withPeriods/classDataByPeriod';
 
 class TransactionPage extends Component {
   state = {
-    date: "",
-    time: "",
+    date: dateApi.current,
+    time: dateApi.currentTime,
     category: this.props.transType === "costs" ? "Еда" : "Зарплата",
     sum: "",
     currency: "USD",

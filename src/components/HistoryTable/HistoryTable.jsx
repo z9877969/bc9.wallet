@@ -1,4 +1,4 @@
-const HistoryTable = ({ transactions }) => {
+const HistoryTable = ({ transactions, onOpenCategoryDetails }) => {
   const transCatList = Object.entries(transactions);
   const allSum = transCatList.reduce((acc, [_, { total }]) => acc + total, 0);
   return (
@@ -10,17 +10,20 @@ const HistoryTable = ({ transactions }) => {
         </tr>
       </thead>
       <tbody>
-        {transCatList.map(([category, { total, data }]) => (
-          <tr key={category}>
-            <td>{category}</td>
-            <td>
-              <span>{total}</span>
-              <button name={''} type="button">
-                {'=>'}
-              </button>
-            </td>
-          </tr>
-        ))}
+        {transCatList.map(([category, { total, data }]) => {
+          const onCategoryList = () => onOpenCategoryDetails(category)
+          return (
+            <tr key={category}>
+              <td>{category}</td>
+              <td>
+                <span>{total}</span>
+                <button onClick={onCategoryList} type="button">
+                  {'=>'}
+                </button>
+              </td>
+            </tr>
+          )
+        })}
       </tbody>
     </table>
   );
