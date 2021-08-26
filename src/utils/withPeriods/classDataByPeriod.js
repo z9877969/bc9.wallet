@@ -6,6 +6,7 @@ class DataByPeriod {
   #dateFormat = {
     simple: 'YYYY-MM-DD',
     full: 'YYYY-MMMM-W',
+    curTime: 'hh:mm',
   };
 
   #direction = {
@@ -46,6 +47,7 @@ class DataByPeriod {
     this.current = moment().format(this.dateFormat.simple);
     this.updatingDate = this.current;
     this.pointOfPeriod = 0;
+    this.currentTime = moment().format(this.dateFormat.curTime);
   }
 
   resetDate = () => moment().format(this.dateFormat.simple);
@@ -72,6 +74,8 @@ class DataByPeriod {
       dayOfWeek,
     };
   };
+
+  getWeekDay = (date) => moment(date).format('dd');
 
   getDataPerDay = (data, date) => {
     return data.filter(transaction => transaction.date === date);
@@ -105,7 +109,7 @@ class DataByPeriod {
 
   getUpdatingDate = (baseDate, method, periodType) =>
     moment(baseDate)
-      [method](1, periodType + 's')
+    [method](1, periodType + 's')
       .format(this.dateFormat.simple);
 
   getDataByCat = data => {
@@ -178,8 +182,8 @@ class DataByPeriod {
       updatingDirection === this.direction.RIGHT
         ? 'add'
         : updatingDirection === this.direction.LEFT
-        ? 'subtract'
-        : null;
+          ? 'subtract'
+          : null;
     if (!method) return;
     this.pointOfPeriod += 1;
     this.updatingDate = this.getUpdatingDate(

@@ -9,31 +9,26 @@ import HistoryHeaderBtns from '../HistoryHeaderBtns/HistoryHeaderBtns';
 import MenuList from '../MenuList/MenuList';
 import periodList from '../../assets/periodList.json';
 import dateApi from '../../utils/withPeriods/classDataByPeriod';
-
-const dataCatList = [
-  {
-    name: 'drinks',
-    title: 'Напитки',
-    sum: '2000',
-  },
-  {
-    name: 'food',
-    title: 'Еда',
-    sum: '1000',
-  },
-  {
-    name: 'other',
-    title: 'Разное',
-    sum: '500',
-  },
-];
+import CategoryDetailsList from '../CategoryDetailsList/CategoryDetailsList';
 
 class TransactionsHistoryPage extends Component {
   state = {
     isOpenPeriodList: false,
     touchedPeriod: periodList[0],
     thouchedDate: dateApi.current,
+    isCategoryDetails: false,
+    categoryDetailsName: "",
   };
+
+  onOpenCategoryDetails = (category) => {
+    this.setState({ categoryDetailsName: category });
+    this.onToggleCategoryDetails();
+  }
+
+  onToggleCategoryDetails = () => {
+    this.setState(prevState => ({ isCategoryDetails: !prevState.isCategoryDetails }))
+  };
+
   onTogglePeriodList = () => {
     this.setState(prevState => {
       return { isOpenPeriodList: !prevState.isOpenPeriodList };
@@ -48,7 +43,7 @@ class TransactionsHistoryPage extends Component {
     this.setState({ thouchedDate: value });
   };
   render() {
-    const { isOpenPeriodList, touchedPeriod, thouchedDate } = this.state;
+    const { isOpenPeriodList, touchedPeriod, thouchedDate, isCategoryDetails, categoryDetailsName } = this.state;
     const { handleReturnToMainPage, transactions } = this.props;
     const allSum = transactions.reduce((acc, { sum }) => acc + Number(sum), 0);
 
@@ -60,24 +55,33 @@ class TransactionsHistoryPage extends Component {
 
     return (
       <BaseSection>
-        <GoBackHeader handleGoBack={handleReturnToMainPage}>
-          <HistoryHeaderBtns
-            onOpenPeriodList={this.onTogglePeriodList}
-            touchedPeriodTitle={touchedPeriod.title}
-          />
-          {isOpenPeriodList && (
-            <MenuList
-              onChangeTouchedPeriod={this.onChangeTouchedPeriod}
-              menuList={periodList}
-            />
-          )}
+        <GoBackHeader handleGoBack={!isCategoryDetails ? handleReturnToMainPage : this.onToggleCategoryDetails}
+          title={isCategoryDetails && categoryDetailsName}>
+          {!isCategoryDetails &&
+            <>
+              <HistoryHeaderBtns
+                onOpenPeriodList={this.onTogglePeriodList}
+                touchedPeriodTitle={touchedPeriod.title}
+              />
+              {isOpenPeriodList && (
+                <MenuList
+                  onChangeTouchedPeriod={this.onChangeTouchedPeriod}
+                  menuList={periodList}
+                />)}
+            </>
+          }
         </GoBackHeader>
-        <DatePaginator
-          onChangeDate={this.onChangeTouchedDate}
-          thouchedDate={thouchedDate}
-          touchedPeriod={touchedPeriod}
-        />
-        <HistoryTable allSum={allSum} transactions={filtredCatTrans} />
+        {!isCategoryDetails ?
+          <>
+            <DatePaginator
+              onChangeDate={this.onChangeTouchedDate}
+              thouchedDate={thouchedDate}
+              touchedPeriod={touchedPeriod}
+            />
+            <HistoryTable allSum={allSum} transactions={filtredCatTrans} onOpenCategoryDetails={this.onOpenCategoryDetails} />
+          </> :
+          <CategoryDetailsList detailsList={filtredCatTrans[categoryDetailsName].data} />
+        }
       </BaseSection>
     );
   }
