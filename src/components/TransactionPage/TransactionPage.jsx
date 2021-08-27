@@ -4,7 +4,7 @@ import BaseSection from "../_share/BaseSection/BaseSection";
 import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
 import TransactionForm from "../TransactionForm/TransactionForm";
 import CategoryListPage from "../CategoryListPage/CategoryListPage";
-import dateApi from '../../utils/withPeriods/classDataByPeriod';
+import dateApi from "../../utils/withPeriods/classDataByPeriod";
 
 class TransactionPage extends Component {
   state = {
@@ -46,8 +46,15 @@ class TransactionPage extends Component {
   };
 
   render() {
-    const { handleReturnToMainPage, transType } = this.props;
+    const {
+      handleReturnToMainPage,
+      transType,
+      handleAddCategory,
+      incomesCategoryList,
+      costsCategoryList,
+    } = this.props;
     const { isCatList, ...dataForm } = this.state;
+
     return (
       <BaseSection>
         {!isCatList ? (
@@ -68,6 +75,10 @@ class TransactionPage extends Component {
             transType={transType}
             handleToggleCatList={this.handleToggleCatList}
             handleSetCategory={this.handleSetCategory}
+            handleAddCategory={handleAddCategory}
+            categoryList={
+              transType === "incomes" ? incomesCategoryList : costsCategoryList
+            }
           />
         )}
       </BaseSection>
