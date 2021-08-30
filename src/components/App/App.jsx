@@ -1,129 +1,116 @@
-import { Component } from "react";
+import { useEffect, useState } from "react";
 import MainPage from "../MainPage/MainPage";
 import TransactionPage from "../TransactionPage/TransactionPage";
 import TransactionsHistoryPage from "../TransactionsHistoryPage/TransactionsHistoryPage";
 import BalancePage from "../BalancePage/BalancePage";
+import { getFromLS, setToLS } from "../../utils/helpers/withLS";
 
-class App extends Component {
-  state = {
-    mainInfoType: "",
-    costs: [],
-    incomes: [],
-    costsCat: [],
-    incomesCat: [],
+import TestWrappedComponent from "../../hoc/withClose";
+
+const App = () => {
+  const [mainInfoType, setMainInfoType] = useState("");
+  const [costs, setCosts] = useState([]);
+  const [incomes, setIncomes] = useState([]);
+  const [costsCat, setCostsCat] = useState([]);
+  const [incomesCat, setIncomesCat] = useState([]);
+  const [isClose, setIsClose] = useState(false);
+
+  const toggleModal = () => {
+    setIsClose((prev) => !prev);
   };
 
-  componentDidMount() {
-    localStorage.getItem("costs") &&
-      this.setState({ costs: JSON.parse(localStorage.getItem("costs")) });
-    localStorage.getItem("incomes") &&
-      this.setState({ incomes: JSON.parse(localStorage.getItem("incomes")) });
-    localStorage.getItem("costsCat") &&
-      this.setState({ costsCat: JSON.parse(localStorage.getItem("costsCat")) });
-    localStorage.getItem("incomesCat") &&
-      this.setState({
-        incomesCat: JSON.parse(localStorage.getItem("incomesCat")),
-      });
-  }
-
-  componentDidUpdate(_, prevState) {
-    if (prevState.costs !== this.state.costs) {
-      localStorage.setItem("costs", JSON.stringify(this.state.costs));
-    }
-    if (prevState.incomes !== this.state.incomes) {
-      localStorage.setItem("incomes", JSON.stringify(this.state.incomes));
-    }
-    if (prevState.costsCat !== this.state.costsCat) {
-      localStorage.setItem("costsCat", JSON.stringify(this.state.costsCat));
-    }
-    if (prevState.incomesCat !== this.state.incomesCat) {
-      localStorage.setItem("incomesCat", JSON.stringify(this.state.incomesCat));
-    }
-  }
-
-  handleAddCategory = ({ transType, category }) => {
+  const handleAddCategory = ({ transType, category }) => {
     switch (transType) {
       case "incomes":
-        return this.setState((prev) => ({
-          incomesCat: [...prev.incomesCat, category],
-        }));
+        return setIncomesCat((prevIncomesCat) => [...prevIncomesCat, category]);
       case "costs":
-        return this.setState((prev) => ({
-          costsCat: [...prev.costsCat, category],
-        }));
+        return setCostsCat((prevCostsCat) => [...prevCostsCat, category]);
       default:
         return;
     }
   };
 
-  handleOpenTransaction = (mainInfoType) => {
-    this.setState({ mainInfoType: mainInfoType });
+  const handleOpenTransaction = (mainInfoType) => setMainInfoType(mainInfoType);
+
+  const handleReturnToMainPage = () => setMainInfoType("");
+
+  const handleAddTransaction = ({ transaction, transType }) => {
+    transType === "costs" &&
+      setCosts((prevCosts) => [...prevCosts, transaction]);
+    transType === "incomes" &&
+      setIncomes((prevIncomes) => [...prevIncomes, transaction]);
   };
 
-  handleReturnToMainPage = () => {
-    this.setState({ mainInfoType: "" });
-  };
+  useEffect(() => {
+    getFromLS("costs", setCosts);
+    getFromLS("incomes", setIncomes);
+    getFromLS("costsCat", setCostsCat);
+    getFromLS("incomesCat", setIncomesCat);
+  }, []);
+  useEffect(() => {
+    setToLS("costs", costs);
+  }, [costs]);
+  useEffect(() => {
+    setToLS("incomes", incomes);
+  }, [incomes]);
+  useEffect(() => {
+    setToLS("costsCat", costsCat);
+  }, [costsCat]);
+  useEffect(() => {
+    setToLS("incomesCat", incomesCat);
+  }, [incomesCat]);
 
-  handleAddTransaction = ({ transaction, transType }) => {
-    this.setState((prev) => ({
-      [transType]: [...prev[transType], transaction],
-    }));
-  };
-
-  render() {
-    const { mainInfoType, costs, incomes, incomesCat, costsCat } = this.state;
-
-    switch (mainInfoType) {
-      case "balance":
-        return (
-          <BalancePage handleReturnToMainPage={this.handleReturnToMainPage} />
-        );
-      case "costs":
-        return (
-          <>
-            <TransactionPage
-              transType="costs"
-              handleReturnToMainPage={this.handleReturnToMainPage}
-              handleAddTransaction={this.handleAddTransaction}
-              handleAddCategory={this.handleAddCategory}
-              costsCategoryList={costsCat}
-            />
-          </>
-        );
-      case "incomes":
-        return (
+  switch (mainInfoType) {
+    case "balance":
+      return <BalancePage handleReturnToMainPage={handleReturnToMainPage} />;
+    case "costs":
+      return (
+        <>
           <TransactionPage
-            transType="incomes"
-            handleReturnToMainPage={this.handleReturnToMainPage}
-            handleAddTransaction={this.handleAddTransaction}
-            handleAddCategory={this.handleAddCategory}
-            incomesCategoryList={incomesCat}
+            transType="costs"
+            handleReturnToMainPage={handleReturnToMainPage}
+            handleAddTransaction={handleAddTransaction}
+            handleAddCategory={handleAddCategory}
+            costsCategoryList={costsCat}
           />
-        );
-      case "costsHistory":
-        return (
-          <TransactionsHistoryPage
-            transactions={costs}
-            handleReturnToMainPage={this.handleReturnToMainPage}
-          />
-        );
-      case "incomesHistory":
-        return (
-          <TransactionsHistoryPage
-            transactions={incomes}
-            handleReturnToMainPage={this.handleReturnToMainPage}
-          />
-        );
-      default:
-        return (
+        </>
+      );
+    case "incomes":
+      return (
+        <TransactionPage
+          transType="incomes"
+          handleReturnToMainPage={handleReturnToMainPage}
+          handleAddTransaction={handleAddTransaction}
+          handleAddCategory={handleAddCategory}
+          incomesCategoryList={incomesCat}
+        />
+      );
+    case "costsHistory":
+      return (
+        <TransactionsHistoryPage
+          transactions={costs}
+          handleReturnToMainPage={handleReturnToMainPage}
+        />
+      );
+    case "incomesHistory":
+      return (
+        <TransactionsHistoryPage
+          transactions={incomes}
+          handleReturnToMainPage={handleReturnToMainPage}
+        />
+      );
+    default:
+      return (
+        <>
           <MainPage
             costs={costs}
             incomes={incomes}
-            handleOpenTransaction={this.handleOpenTransaction}
+            handleOpenTransaction={handleOpenTransaction}
           />
-        );
-    }
+          {!isClose && <TestWrappedComponent isCloseCb={toggleModal} />}
+        </>
+      );
   }
-}
+};
 
 export default App;
