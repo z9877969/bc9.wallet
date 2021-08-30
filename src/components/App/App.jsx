@@ -18,7 +18,7 @@ class App extends Component {
       this.setState({ incomes: JSON.parse(localStorage.getItem('incomes')) });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_, prevState) {
     if (prevState.costs !== this.state.costs) {
       localStorage.setItem('costs', JSON.stringify(this.state.costs));
     }
