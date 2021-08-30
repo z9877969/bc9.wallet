@@ -13,19 +13,26 @@ const CategoryListPage = ({
   handleToggleCatList,
   handleSetCategory,
   transType,
+  handleAddCategory,
+  categoryList,
 }) => {
-  
-  const categoryList =
-    transType === "incomes" ? incomesCategoryList : costsCategoryList;
+  // const categoryList =
+  //   transType === "incomes" ? incomesCategoryList : costsCategoryList;
 
   return (
     <BaseSection>
-      <GoBackHeader title={"Расходы"} handleGoBack={handleToggleCatList} />
+      <GoBackHeader
+        title={transType === "incomes" ? "Доходы" : "Расходы"}
+        handleGoBack={handleToggleCatList}
+      />
       <CategoryList
         categoryList={categoryList}
         handleSetCategory={handleSetCategory}
       />
-      <AddCategoryForm />
+      <AddCategoryForm
+        handleAddCategory={handleAddCategory}
+        transType={transType}
+      />
     </BaseSection>
   );
 };
