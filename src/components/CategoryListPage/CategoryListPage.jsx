@@ -4,10 +4,6 @@ import BaseSection from "../_share/BaseSection/BaseSection";
 import AddCategoryForm from "../AddCategoryForm/AddCategoryForm";
 import CategoryList from "../CategoryList/CategoryList";
 
-import {
-  costsCategoryList,
-  incomesCategoryList,
-} from "../../assets/categoryList.json";
 
 const CategoryListPage = ({
   handleToggleCatList,
@@ -16,8 +12,7 @@ const CategoryListPage = ({
   handleAddCategory,
   categoryList,
 }) => {
-  // const categoryList =
-  //   transType === "incomes" ? incomesCategoryList : costsCategoryList;
+
 
   return (
     <BaseSection>
