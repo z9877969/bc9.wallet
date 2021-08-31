@@ -5,9 +5,9 @@ import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
 import TransactionForm from "../TransactionForm/TransactionForm";
 import CategoryListPage from "../CategoryListPage/CategoryListPage";
 import dateApi from "../../utils/withPeriods/classDataByPeriod";
+import { useForm } from "../../hooks/useForm";
 
 const getInitialState = (transType) => {
-  console.log("getInitialState");
   return {
     date: dateApi.current,
     time: dateApi.currentTime,
@@ -17,14 +17,6 @@ const getInitialState = (transType) => {
     comment: "",
     isCatList: false,
   };
-};
-
-// action = {type, payload}
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "date":
-      return { ...state, date: action.payload };
-  }
 };
 
 const TransactionPage = (props) => {
@@ -39,72 +31,24 @@ const TransactionPage = (props) => {
 
   const initialState = useMemo(() => getInitialState(transType), []);
 
-  const [dataF, dispatch] = useReducer(initialState, reducer);
-
-  const change = (e) => {
-    const { name, value } = e.target;
-    dispatch({ type: name, payload: value });
-  };
-
-  const [date, setDate] = useState(initialState.date);
-  const [time, setTime] = useState(initialState.time);
-  const [category, setCategory] = useState(initialState.category);
-  const [sum, setSum] = useState(initialState.sum);
-  const [currency, setCurrency] = useState(initialState.currency);
-  const [comment, setComment] = useState(initialState.comment);
   const [isCatList, setIsCatList] = useState(initialState.isCatList);
-
-  const dataForm = {
-    date,
-    time,
-    category,
-    sum,
-    comment,
-    currency,
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    switch (name) {
-      case "date":
-        setDate(value);
-        break;
-      case "time":
-        setTime(value);
-        break;
-      case "category":
-        setCategory(value);
-        break;
-      case "sum":
-        setSum(value);
-        break;
-      case "currency":
-        setCurrency(value);
-        break;
-      case "comment":
-        setComment(value);
-        break;
-      default:
-        break;
-    }
-  };
+  
+  const formik = useForm({
+    initialState,
+    handleClickCb: () => {
+      setIsCatList((prev) => !prev);
+    },
+    onSubmit: (dataForm) => {
+      handleAddTransaction({
+        transaction: { id: shortid.generate(), ...dataForm },
+        transType,
+      });
+      handleReturnToMainPage();
+    },
+  });
 
   const handleToggleCatList = () => {
     setIsCatList((prev) => !prev);
-  };
-
-  const handleSetCategory = (category) => {
-    setCategory(category);
-    handleToggleCatList();
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleAddTransaction({
-      transaction: { id: shortid.generate(), ...dataForm },
-      transType,
-    });
-    handleReturnToMainPage();
   };
 
   return (
@@ -116,17 +60,17 @@ const TransactionPage = (props) => {
             handleGoBack={handleReturnToMainPage}
           />
           <TransactionForm
-            dataForm={dataForm}
-            handleChange={handleChange}
+            dataForm={formik.data}
+            handleChange={formik.handleChange}
             handleToggleCatList={handleToggleCatList}
-            handleSubmit={handleSubmit}
+            handleSubmit={formik.handleSubmit}
           />
         </>
       ) : (
         <CategoryListPage
           transType={transType}
           handleToggleCatList={handleToggleCatList}
-          handleSetCategory={handleSetCategory}
+          handleSetCategory={formik.handleSetDataByClick}
           handleAddCategory={handleAddCategory}
           categoryList={
             transType === "incomes" ? incomesCategoryList : costsCategoryList
