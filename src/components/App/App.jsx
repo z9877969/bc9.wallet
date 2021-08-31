@@ -5,19 +5,12 @@ import TransactionsHistoryPage from "../TransactionsHistoryPage/TransactionsHist
 import BalancePage from "../BalancePage/BalancePage";
 import { getFromLS, setToLS } from "../../utils/helpers/withLS";
 
-import TestWrappedComponent from "../../hoc/withClose";
-
 const App = () => {
   const [mainInfoType, setMainInfoType] = useState("");
   const [costs, setCosts] = useState([]);
   const [incomes, setIncomes] = useState([]);
   const [costsCat, setCostsCat] = useState([]);
   const [incomesCat, setIncomesCat] = useState([]);
-  const [isClose, setIsClose] = useState(false);
-
-  const toggleModal = () => {
-    setIsClose((prev) => !prev);
-  };
 
   const handleAddCategory = ({ transType, category }) => {
     switch (transType) {
@@ -107,7 +100,6 @@ const App = () => {
             incomes={incomes}
             handleOpenTransaction={handleOpenTransaction}
           />
-          {!isClose && <TestWrappedComponent isCloseCb={toggleModal} />}
         </>
       );
   }

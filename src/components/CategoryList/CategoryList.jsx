@@ -6,7 +6,10 @@ const CategoryList = ({ categoryList, handleSetCategory }) => {
     <List>
       {categoryList.map(({ title, name }) => (
         <Item key={name}>
-          <button type="button" onClick={() => handleSetCategory(title)}>
+          <button
+            type="button"
+            onClick={() => handleSetCategory(["category", title])}
+          >
             {title}
           </button>
           <button name={name} type="button" className="button">
