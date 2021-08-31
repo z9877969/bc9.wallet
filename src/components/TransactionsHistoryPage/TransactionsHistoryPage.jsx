@@ -1,59 +1,50 @@
-import { Component } from "react";
+import { useState } from "react";
 import DatePaginator from "../DatePaginator/DatePaginator";
 import HistoryTable from "../HistoryTable/HistoryTable";
 import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
-import LabelInput from "../_share/LabelInput/LabelInput";
-import Section from "../_share/Section/Section";
 import BaseSection from "../_share/BaseSection/BaseSection";
 import HistoryHeaderBtns from "../HistoryHeaderBtns/HistoryHeaderBtns";
 import MenuList from "../MenuList/MenuList";
 import periodList from "../../assets/periodList.json";
 import dateApi from "../../utils/withPeriods/classDataByPeriod";
 import CategoryDetailsList from "../CategoryDetailsList/CategoryDetailsList";
+import { func } from "prop-types";
 
-class TransactionsHistoryPage extends Component {
-  state = {
-    isOpenPeriodList: false,
-    touchedPeriod: periodList[0],
-    thouchedDate: dateApi.current,
-    isCategoryDetails: false,
-    categoryDetailsName: "",
+const TransactionsHistoryPage =({ handleReturnToMainPage, transactions } ) => {
+
+  const [isOpenPeriodList, setIsOpenPeriodList] =useState(false)
+  const [touchedPeriod, setTouchedPeriod] =useState(periodList[0])
+  const [thouchedDate, setThouchedDate] =useState(dateApi.current)
+  const [isCategoryDetails, setIsCategoryDetails] =useState(false)
+  const [categoryDetailsName, setCategoryDetailsName] =useState('')
+ 
+
+  const onToggleCategoryDetails = () => {
+    setIsCategoryDetails((prevState) => ( !prevState));
   };
-
-  onOpenCategoryDetails = (category) => {
-    this.setState({ categoryDetailsName: category });
-    this.onToggleCategoryDetails();
+  
+  const onOpenCategoryDetails = (category) => {
+    setCategoryDetailsName(category);
+    onToggleCategoryDetails();
   };
-
-  onToggleCategoryDetails = () => {
-    this.setState((prevState) => ({
-      isCategoryDetails: !prevState.isCategoryDetails,
-    }));
-  };
-
-  onTogglePeriodList = () => {
-    this.setState((prevState) => {
-      return { isOpenPeriodList: !prevState.isOpenPeriodList };
+  
+  const onTogglePeriodList = () => {
+    setIsOpenPeriodList((prevState) => {
+      return !prevState;
     });
   };
-  onChangeTouchedPeriod = (periodObj) => {
-    this.setState({ touchedPeriod: periodObj });
-    this.onTogglePeriodList();
+
+  const onChangeTouchedPeriod = (periodObj) => {
+    setTouchedPeriod(periodObj);
+    onTogglePeriodList();
   };
-  onChangeTouchedDate = (e) => {
+
+  const onChangeTouchedDate = (e) => {
     const { value } = e.target;
-    this.setState({ thouchedDate: value });
+    setThouchedDate(value);
   };
-  render() {
-    const {
-      isOpenPeriodList,
-      touchedPeriod,
-      thouchedDate,
-      isCategoryDetails,
-      categoryDetailsName,
-    } = this.state;
-    const { handleReturnToMainPage, transactions } = this.props;
-    const allSum = transactions.reduce((acc, { sum }) => acc + Number(sum), 0);
+
+      const allSum = transactions.reduce((acc, { sum }) => acc + Number(sum), 0);
 
     const filtredCatTrans = dateApi.getDataListOfCategories({
       data: transactions,
@@ -67,19 +58,19 @@ class TransactionsHistoryPage extends Component {
           handleGoBack={
             !isCategoryDetails
               ? handleReturnToMainPage
-              : this.onToggleCategoryDetails
+              : onToggleCategoryDetails
           }
           title={isCategoryDetails && categoryDetailsName}
         >
           {!isCategoryDetails && (
             <>
               <HistoryHeaderBtns
-                onOpenPeriodList={this.onTogglePeriodList}
+                onOpenPeriodList={onTogglePeriodList}
                 touchedPeriodTitle={touchedPeriod.title}
               />
               {isOpenPeriodList && (
                 <MenuList
-                  onChangeTouchedPeriod={this.onChangeTouchedPeriod}
+                  onChangeTouchedPeriod={onChangeTouchedPeriod}
                   menuList={periodList}
                 />
               )}
@@ -89,14 +80,14 @@ class TransactionsHistoryPage extends Component {
         {!isCategoryDetails ? (
           <>
             <DatePaginator
-              onChangeDate={this.onChangeTouchedDate}
+              onChangeDate={onChangeTouchedDate}
               thouchedDate={thouchedDate}
               touchedPeriod={touchedPeriod}
             />
             <HistoryTable
               allSum={allSum}
               transactions={filtredCatTrans}
-              onOpenCategoryDetails={this.onOpenCategoryDetails}
+              onOpenCategoryDetails={onOpenCategoryDetails}
             />
           </>
         ) : (
@@ -106,7 +97,7 @@ class TransactionsHistoryPage extends Component {
         )}
       </BaseSection>
     );
-  }
+  
 }
 
 export default TransactionsHistoryPage;

@@ -1,41 +1,37 @@
-import { Component } from "react";
+import { useState } from "react";
 import sprite from "../../assets/icons/symbol-defs.svg";
 import { Form } from "./AddCategoryForm.style";
 import shortid from "shortid";
 
-class AddCategoryForm extends Component {
-  state = { category: "" };
+const AddCategoryForm = ({ transType, handleAddCategory } ) => {
+  const [category, setCategory] = useState('')
+  
 
-  handleChange = (e) => {
-    this.setState({ category: e.target.value });
+  const handleChange = (e) => {
+    setCategory(e.target.value );
   };
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const { transType, handleAddCategory } = this.props;
-    const { category } = this.state;
+ const handleSubmit = (e) => {
+    e.preventDefault();    
 
     handleAddCategory({
-      transType: transType,
+      transType,
       category: {
         title: category,
         name: shortid.generate(),
       },
     });
 
-    this.reset();
+    setCategory('')
   };
-
-  reset = () => this.setState({ category: "" });
-  render() {
-    const { category } = this.state;
+      
     return (
-      <Form onSubmit={this.handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <input
           type="text"
           value={category}
           placeholder="Новая категория..."
-          onChange={this.handleChange}
+          onChange={handleChange}
         />
         <button>
           <svg>
@@ -44,7 +40,7 @@ class AddCategoryForm extends Component {
         </button>
       </Form>
     );
-  }
+  
 }
 
 export default AddCategoryForm;
