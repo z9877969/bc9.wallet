@@ -8,6 +8,7 @@ export const useForm = ({ initialState, handleClickCb, onSubmit }) => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
   const handleSetDataByClick = ([name, value]) => {
+    console.log("[name, value] :>> ", [name, value]);
     setForm((prev) => ({ ...prev, [name]: value }));
     handleClickCb();
   };
