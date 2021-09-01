@@ -1,0 +1,57 @@
+.list {
+  width: 100%;
+  padding: 15px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  & > p,
+  & > button {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    & span:last-child {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgb(172, 164, 164);
+    }
+  }
+
+  & p {
+    align-items: flex-start;
+
+    width: fit-content;
+    & span:first-child {
+      color: #212121;
+    }
+  }
+
+  & button {
+    align-items: flex-end;
+    padding-right: 20px;
+    background: none;
+    background-image: url(../../assets//icons/dots-horizontal-triple.svg);
+    background-repeat: no-repeat;
+    background-size: 20%;
+    background-position: right center;
+    border: none;
+
+    & span:first-child {
+      font-size: 20px;
+      color: rgb(48, 165, 185);
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
