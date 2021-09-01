@@ -1,4 +1,4 @@
-import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
+import GoBackHeader from "../components/_share/GoBackHeader/GoBackHeader";
 
 const BalancePage = ({ handleReturnToMainPage }) => {
   return (

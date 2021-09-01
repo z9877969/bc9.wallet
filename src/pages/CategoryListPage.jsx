@@ -1,9 +1,7 @@
-import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
-import Section from "../_share/Section/Section";
-import BaseSection from "../_share/BaseSection/BaseSection";
-import AddCategoryForm from "../AddCategoryForm/AddCategoryForm";
-import CategoryList from "../CategoryList/CategoryList";
-
+import GoBackHeader from "../components/_share/GoBackHeader/GoBackHeader";
+import BaseSection from "../components/_share/BaseSection/BaseSection";
+import AddCategoryForm from "../components/AddCategoryForm/AddCategoryForm";
+import CategoryList from "../components/CategoryList/CategoryList";
 
 const CategoryListPage = ({
   handleToggleCatList,
@@ -12,8 +10,6 @@ const CategoryListPage = ({
   handleAddCategory,
   categoryList,
 }) => {
-
-
   return (
     <BaseSection>
       <GoBackHeader

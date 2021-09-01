@@ -14,9 +14,7 @@ export default withClose(TestWrappedComponent);
 function withClose(WrappedComponent) {
   return ({ isClose, isCloseCb, ...props }) => {
     const handleEscClose = (e) => {
-      console.log("object :>> ");
       if (e.key === "Escape") {
-        console.log("escape");
         isCloseCb();
       }
     };

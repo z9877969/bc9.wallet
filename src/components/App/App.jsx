@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
-import MainPage from "../MainPage/MainPage";
-import TransactionPage from "../TransactionPage/TransactionPage";
-import TransactionsHistoryPage from "../TransactionsHistoryPage/TransactionsHistoryPage";
-import BalancePage from "../BalancePage/BalancePage";
+import MainPage from "../../pages/MainPage";
+import TransactionPage from "../../pages/TransactionPage";
+import TransactionsHistoryPage from "../../pages/TransactionsHistoryPage";
+import BalancePage from "../../pages/BalancePage";
 import { getFromLS, setToLS } from "../../utils/helpers/withLS";
 
 const App = () => {
   const history = useHistory();
 
-  const [mainInfoType, setMainInfoType] = useState("");
   const [costs, setCosts] = useState([]);
   const [incomes, setIncomes] = useState([]);
   const [costsCat, setCostsCat] = useState([]);
@@ -27,17 +26,17 @@ const App = () => {
   };
 
   const handleOpenTransaction = (transType) => {
-    const transactionLocation = {
-      pathname: `/transaction/${transType}`,
-      state: { from: history.location },
-    };
-    const balanceLocation = {
-      pathname: `/${transType}`,
-      state: { from: history.location },
-    };
-    history.push(
-      transType === "balance" ? balanceLocation : transactionLocation
-    );
+    const nextLocation =
+      transType === "balance"
+        ? {
+            pathname: `/${transType}`,
+            state: { from: history.location },
+          }
+        : {
+            pathname: `/transaction/${transType}`,
+            state: { from: history.location },
+          };
+    history.push(nextLocation);
   };
 
   const handleAddTransaction = ({ transaction, transType }) => {
@@ -92,6 +91,12 @@ const App = () => {
         )}
       />
       <Route path="/balance" component={BalancePage} />
+      <Route path="/history">
+        <TransactionsHistoryPage
+          transactions={incomes}
+          // handleReturnToMainPage={handleReturnToMainPage}
+        />
+      </Route>
     </Switch>
   );
 };
@@ -99,30 +104,6 @@ const App = () => {
 export default App;
 
 // switch (mainInfoType) {
-//   case "balance":
-//     return <BalancePage handleReturnToMainPage={handleReturnToMainPage} />;
-//   case "costs":
-//     return (
-//       <>
-//         <TransactionPage
-//           transType="costs"
-//           handleReturnToMainPage={handleReturnToMainPage}
-//           handleAddTransaction={handleAddTransaction}
-//           handleAddCategory={handleAddCategory}
-//           costsCategoryList={costsCat}
-//         />
-//       </>
-//     );
-//   case "incomes":
-//     return (
-//       <TransactionPage
-//         transType="incomes"
-//         handleReturnToMainPage={handleReturnToMainPage}
-//         handleAddTransaction={handleAddTransaction}
-//         handleAddCategory={handleAddCategory}
-//         incomesCategoryList={incomesCat}
-//       />
-//     );
 //   case "costsHistory":
 //     return (
 //       <TransactionsHistoryPage
@@ -136,15 +117,5 @@ export default App;
 //         transactions={incomes}
 //         handleReturnToMainPage={handleReturnToMainPage}
 //       />
-//     );
-//   default:
-//     return (
-//       <>
-//         <MainPage
-//           costs={costs}
-//           incomes={incomes}
-//           handleOpenTransaction={handleOpenTransaction}
-//         />
-//       </>
 //     );
 // }

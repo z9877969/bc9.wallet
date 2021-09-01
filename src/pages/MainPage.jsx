@@ -1,11 +1,11 @@
-import BaseSection from "../_share/BaseSection/BaseSection";
-import MainInfo from "../MainInfo/MainInfo";
-import ButtonsToHistory from "../ButtonsToHistory/ButtonsToHistory";
+import BaseSection from "../components/_share/BaseSection/BaseSection";
+import MainInfo from "../components/MainInfo/MainInfo";
+import ButtonsToHistory from "../components/ButtonsToHistory/ButtonsToHistory";
 import {
   incomesMainInfo,
   costsMainInfo,
   balanceMainInfo,
-} from "../../assets/mainInfo.json";
+} from "../assets/mainInfo.json";
 
 const MainPage = ({ handleOpenTransaction, costs, incomes }) => {
   return (

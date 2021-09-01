@@ -11,24 +11,3 @@ const CategoryDetailsList = ({ detailsList }) => {
 
 export default CategoryDetailsList;
 
-
-// category
-// :
-// "Еда"
-// comment
-// :
-// ""
-// new entry
-// :
-// "USD"
-// date
-// :
-// "2021-08-26"
-// id
-// :
-// "XLNAWAB0z"
-// sum
-// :
-// "350"
-// time
-// :

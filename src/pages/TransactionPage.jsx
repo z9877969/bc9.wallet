@@ -1,12 +1,12 @@
-import { useState, useRef, useEffect, useMemo, useReducer } from "react";
+import { useMemo } from "react";
 import { Route, Switch } from "react-router-dom";
 import shortid from "shortid";
-import BaseSection from "../_share/BaseSection/BaseSection";
-import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
-import TransactionForm from "../TransactionForm/TransactionForm";
-import CategoryListPage from "../CategoryListPage/CategoryListPage";
-import dateApi from "../../utils/withPeriods/classDataByPeriod";
-import { useForm } from "../../hooks/useForm";
+import BaseSection from "../components/_share/BaseSection/BaseSection";
+import GoBackHeader from "../components/_share/GoBackHeader/GoBackHeader";
+import TransactionForm from "../components/TransactionForm/TransactionForm";
+import CategoryListPage from "./CategoryListPage";
+import dateApi from "../utils/withPeriods/classDataByPeriod";
+import { useForm } from "../hooks/useForm";
 
 const getInitialState = (transType) => {
   return {
