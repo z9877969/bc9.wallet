@@ -1,15 +1,23 @@
-import dateApi from '../../../utils/withPeriods/classDataByPeriod'
+import dateApi from "../../../utils/withPeriods/classDataByPeriod";
 
-
-const CategoryDetailsListItem = ({ comment, currency, date, sum, time }) =>
-    <li>
-        <span>{dateApi.getWeekDay(date)}</span>
-        <span>{date}</span>
-        <span>{time}</span>
-        <span>{comment}</span>
-        <span>{sum}</span>
-        <span>{currency}</span>
-        <button type="button">...</button>
-    </li>
+const CategoryDetailsListItem = ({
+  comment,
+  currency,
+  date,
+  sum,
+  time,
+  className,
+}) => (
+  <li className={className}>
+    <p className="commentDate">
+      <span>{`${dateApi.getWeekDay(date)}, ${date} ${time}`}</span>
+      <span>{comment}</span>
+    </p>
+    <button className="menuBtn" type="button">
+      <span>{sum}</span>
+      <span>{currency}</span>
+    </button>
+  </li>
+);
 
 export default CategoryDetailsListItem;
