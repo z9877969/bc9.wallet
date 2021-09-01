@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useMemo, useReducer } from "react";
+import { Route, Switch } from "react-router-dom";
 import shortid from "shortid";
 import BaseSection from "../_share/BaseSection/BaseSection";
 import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
@@ -21,43 +22,66 @@ const getInitialState = (transType) => {
 
 const TransactionPage = (props) => {
   const {
-    transType,
-    handleReturnToMainPage,
+    match,
+    history,
     handleAddTransaction,
-    handleAddCategory,
     costsCategoryList,
     incomesCategoryList,
   } = props;
 
+  const {
+    params: { transType },
+  } = match;
+
   const initialState = useMemo(() => getInitialState(transType), []);
 
-  const [isCatList, setIsCatList] = useState(initialState.isCatList);
-  
+  const handleToggleCatList = (isGoBack) => {
+    history.push(
+      typeof isGoBack === "object"
+        ? {
+            pathname: `/transaction/${transType}/cat-list`,
+            state: { from: history.location },
+          }
+        : history.location.state?.from || "/"
+    );
+  };
+
   const formik = useForm({
     initialState,
     handleClickCb: () => {
-      setIsCatList((prev) => !prev);
+      handleToggleCatList();
     },
     onSubmit: (dataForm) => {
       handleAddTransaction({
         transaction: { id: shortid.generate(), ...dataForm },
         transType,
       });
-      handleReturnToMainPage();
+      history.push(history.location.state?.from || "/");
     },
   });
 
-  const handleToggleCatList = () => {
-    setIsCatList((prev) => !prev);
-  };
-
   return (
     <BaseSection>
-      {!isCatList ? (
-        <>
+      <Switch>
+        <Route
+          path="/transaction/:transType/cat-list"
+          render={(props) => (
+            <CategoryListPage
+              {...props}
+              transType={transType}
+              handleToggleCatList={handleToggleCatList}
+              handleSetCategory={formik.handleSetDataByClick}
+              categoryList={
+                transType === "incomes"
+                  ? incomesCategoryList
+                  : costsCategoryList
+              }
+            />
+          )}
+        />
+        <Route path="/transaction/:transType">
           <GoBackHeader
             title={transType === "incomes" ? "Доходы" : "Расходы"}
-            handleGoBack={handleReturnToMainPage}
           />
           <TransactionForm
             dataForm={formik.data}
@@ -65,18 +89,8 @@ const TransactionPage = (props) => {
             handleToggleCatList={handleToggleCatList}
             handleSubmit={formik.handleSubmit}
           />
-        </>
-      ) : (
-        <CategoryListPage
-          transType={transType}
-          handleToggleCatList={handleToggleCatList}
-          handleSetCategory={formik.handleSetDataByClick}
-          handleAddCategory={handleAddCategory}
-          categoryList={
-            transType === "incomes" ? incomesCategoryList : costsCategoryList
-          }
-        />
-      )}
+        </Route>
+      </Switch>
     </BaseSection>
   );
 };
