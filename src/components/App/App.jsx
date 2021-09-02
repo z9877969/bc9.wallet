@@ -25,19 +25,7 @@ const App = () => {
     }
   };
 
-  const handleOpenTransaction = (transType) => {
-    const nextLocation =
-      transType === "balance"
-        ? {
-            pathname: `/${transType}`,
-            state: { from: history.location },
-          }
-        : {
-            pathname: `/transaction/${transType}`,
-            state: { from: history.location },
-          };
-    history.push(nextLocation);
-  };
+
 
   const handleAddTransaction = ({ transaction, transType }) => {
     transType === "costs" &&
@@ -75,7 +63,6 @@ const App = () => {
             {...props}
             costs={costs}
             incomes={incomes}
-            handleOpenTransaction={handleOpenTransaction}
           />
         )}
       />
@@ -91,10 +78,10 @@ const App = () => {
         )}
       />
       <Route path="/balance" component={BalancePage} />
-      <Route path="/history">
+      <Route path="/history/:transType">
         <TransactionsHistoryPage
-          transactions={incomes}
-          // handleReturnToMainPage={handleReturnToMainPage}
+          transactions={{ incomes, costs }}
+        // handleReturnToMainPage={handleReturnToMainPage}
         />
       </Route>
     </Switch>

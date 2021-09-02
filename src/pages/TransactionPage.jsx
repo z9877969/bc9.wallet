@@ -27,6 +27,7 @@ const TransactionPage = (props) => {
     handleAddTransaction,
     costsCategoryList,
     incomesCategoryList,
+    handleAddCategory
   } = props;
 
   const {
@@ -39,9 +40,9 @@ const TransactionPage = (props) => {
     history.push(
       typeof isGoBack === "object"
         ? {
-            pathname: `/transaction/${transType}/cat-list`,
-            state: { from: history.location },
-          }
+          pathname: `/transaction/${transType}/cat-list`,
+          state: { from: history.location },
+        }
         : history.location.state?.from || "/"
     );
   };
@@ -71,6 +72,7 @@ const TransactionPage = (props) => {
               transType={transType}
               handleToggleCatList={handleToggleCatList}
               handleSetCategory={formik.handleSetDataByClick}
+              handleAddCategory={handleAddCategory}
               categoryList={
                 transType === "incomes"
                   ? incomesCategoryList
