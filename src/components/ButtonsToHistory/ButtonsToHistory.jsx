@@ -4,14 +4,14 @@ const ButtonsToHistory = ({ handleOpenTransaction }) => {
   return (
     <div className={s.container}>
       <button
-        onClick={() => handleOpenTransaction("costsHistory")}
+        onClick={() => handleOpenTransaction("costs")}
         className={s.button}
         type="button"
       >
         Все расходы
       </button>
       <button
-        onClick={() => handleOpenTransaction("incomesHistory")}
+        onClick={() => handleOpenTransaction("incomes")}
         className={s.button}
         type="button"
       >

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useHistory, useParams, useRouteMatch, Route, Switch } from "react-router-dom";
 import DatePaginator from "../components/DatePaginator/DatePaginator";
 import HistoryTable from "../components/HistoryTable/HistoryTable";
 import GoBackHeader from "../components/_share/GoBackHeader/GoBackHeader";
@@ -10,19 +11,24 @@ import dateApi from "../utils/withPeriods/classDataByPeriod";
 import CategoryDetailsList from "../components/CategoryDetailsList/CategoryDetailsList";
 
 const TransactionsHistoryPage = ({ handleReturnToMainPage, transactions }) => {
+  const history = useHistory();
+  const { transType } = useParams();
   const [isOpenPeriodList, setIsOpenPeriodList] = useState(false);
   const [touchedPeriod, setTouchedPeriod] = useState(periodList[0]);
   const [thouchedDate, setThouchedDate] = useState(dateApi.current);
-  const [isCategoryDetails, setIsCategoryDetails] = useState(false);
   const [categoryDetailsName, setCategoryDetailsName] = useState("");
+  const curTransactions = transactions[transType];
 
-  const onToggleCategoryDetails = () => {
-    setIsCategoryDetails((prevState) => !prevState);
-  };
+
 
   const onOpenCategoryDetails = (category) => {
+    const nextLocation = {
+      pathname: `/history/${transType}/details`,
+      state: { from: history.location }
+    }
     setCategoryDetailsName(category);
-    onToggleCategoryDetails();
+    history.push(nextLocation);
+
   };
 
   const onTogglePeriodList = () => {
@@ -41,24 +47,26 @@ const TransactionsHistoryPage = ({ handleReturnToMainPage, transactions }) => {
     setThouchedDate(value);
   };
 
-  const allSum = transactions.reduce((acc, { sum }) => acc + Number(sum), 0);
+  const allSum = curTransactions.reduce((acc, { sum }) => acc + Number(sum), 0);
 
   const filtredCatTrans = dateApi.getDataListOfCategories({
-    data: transactions,
+    data: curTransactions,
     date: thouchedDate,
     period: touchedPeriod.name,
   });
-
+  console.log(transactions)
   return (
     <BaseSection>
-      <GoBackHeader
-        handleGoBack={
-          !isCategoryDetails ? handleReturnToMainPage : onToggleCategoryDetails
-        }
-        title={isCategoryDetails && categoryDetailsName}
-      >
-        {!isCategoryDetails && (
-          <>
+
+      <Switch>
+        <Route path="/history/:transType/details">
+          <GoBackHeader title={categoryDetailsName} />
+          <CategoryDetailsList
+            detailsList={filtredCatTrans[categoryDetailsName]?.data || []}
+          />
+        </Route>
+        <Route path="/history/:transType">
+          <GoBackHeader>
             <HistoryHeaderBtns
               onOpenPeriodList={onTogglePeriodList}
               touchedPeriodTitle={touchedPeriod.title}
@@ -69,11 +77,7 @@ const TransactionsHistoryPage = ({ handleReturnToMainPage, transactions }) => {
                 menuList={periodList}
               />
             )}
-          </>
-        )}
-      </GoBackHeader>
-      {!isCategoryDetails ? (
-        <>
+          </GoBackHeader>
           <DatePaginator
             onChangeDate={onChangeTouchedDate}
             thouchedDate={thouchedDate}
@@ -81,15 +85,12 @@ const TransactionsHistoryPage = ({ handleReturnToMainPage, transactions }) => {
           />
           <HistoryTable
             allSum={allSum}
+            // allSum="0"
             transactions={filtredCatTrans}
             onOpenCategoryDetails={onOpenCategoryDetails}
           />
-        </>
-      ) : (
-        <CategoryDetailsList
-          detailsList={filtredCatTrans[categoryDetailsName].data}
-        />
-      )}
+        </Route>
+      </Switch>
     </BaseSection>
   );
 };

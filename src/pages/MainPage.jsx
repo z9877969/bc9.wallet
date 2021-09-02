@@ -7,7 +7,30 @@ import {
   balanceMainInfo,
 } from "../assets/mainInfo.json";
 
-const MainPage = ({ handleOpenTransaction, costs, incomes }) => {
+const MainPage = ({ costs, incomes, history }) => {
+
+  const handleOpenTransaction = (transType) => {
+    const nextLocation =
+      transType === "balance"
+        ? {
+          pathname: `/${transType}`,
+          state: { from: history.location },
+        }
+        : {
+          pathname: `/transaction/${transType}`,
+          state: { from: history.location },
+        };
+    history.push(nextLocation);
+  };
+
+  const handleOpenHistory = (transType) => {
+    const nextLocation = {
+      pathname: `/history/${transType}`,
+      state: { from: history.location }
+    }
+    history.push(nextLocation);
+  }
+
   return (
     <BaseSection title={"Журнал расходов"}>
       <MainInfo
@@ -35,9 +58,9 @@ const MainPage = ({ handleOpenTransaction, costs, incomes }) => {
         titleColor="balance"
         mainInfoType="balance"
         buttonIcon="icon-navigation-more"
-        // transactions={}
+      // transactions={}
       />
-      <ButtonsToHistory handleOpenTransaction={handleOpenTransaction} />
+      <ButtonsToHistory handleOpenTransaction={handleOpenHistory} />
     </BaseSection>
   );
 };
