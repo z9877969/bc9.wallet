@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
-import MainPage from "../../pages/MainPage";
-import TransactionPage from "../../pages/TransactionPage";
-import TransactionsHistoryPage from "../../pages/TransactionsHistoryPage";
-import BalancePage from "../../pages/BalancePage";
 import { getFromLS, setToLS } from "../../utils/helpers/withLS";
+
+const MainPage = lazy(() =>  import('../../pages/MainPage' /*webpackChunkName: "main-page" */)); 
+const TransactionPage = lazy(() =>  import("../../pages/TransactionPage" /*webpackChunkName: "transaction-page" */));
+const TransactionsHistoryPage = lazy(() =>  import("../../pages/TransactionsHistoryPage" /*webpackChunkName: "transactions-history-page" */));
+const BalancePage = lazy(() =>  import('../../pages/BalancePage' /*webpackChunkName: "balance-page" */));
+
+
+
 
 const App = () => {
   const history = useHistory();
@@ -24,8 +28,6 @@ const App = () => {
         return;
     }
   };
-
-
 
   const handleAddTransaction = ({ transaction, transType }) => {
     transType === "costs" &&
@@ -54,6 +56,7 @@ const App = () => {
   }, [incomesCat]);
 
   return (
+    <Suspense fallback={<div>Loading...</div>}> 
     <Switch>
       <Route
         path="/"
@@ -84,7 +87,8 @@ const App = () => {
         // handleReturnToMainPage={handleReturnToMainPage}
         />
       </Route>
-    </Switch>
+      </Switch>
+      </Suspense>
   );
 };
 

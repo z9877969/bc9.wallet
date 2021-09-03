@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy } from "react";
 import { useHistory, useParams, useRouteMatch, Route, Switch } from "react-router-dom";
 import DatePaginator from "../components/DatePaginator/DatePaginator";
 import HistoryTable from "../components/HistoryTable/HistoryTable";
@@ -8,7 +8,7 @@ import HistoryHeaderBtns from "../components/HistoryHeaderBtns/HistoryHeaderBtns
 import MenuList from "../components/MenuList/MenuList";
 import periodList from "../assets/periodList.json";
 import dateApi from "../utils/withPeriods/classDataByPeriod";
-import CategoryDetailsList from "../components/CategoryDetailsList/CategoryDetailsList";
+const CategoryDetailsList = lazy(() => import("../components/CategoryDetailsList/CategoryDetailsList"  /* webpackChunkName: "category-details-list"*/)) ;
 
 const TransactionsHistoryPage = ({ handleReturnToMainPage, transactions }) => {
   const history = useHistory();

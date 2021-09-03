@@ -1,12 +1,13 @@
-import { useMemo } from "react";
+import { useMemo, lazy } from "react";
 import { Route, Switch } from "react-router-dom";
 import shortid from "shortid";
 import BaseSection from "../components/_share/BaseSection/BaseSection";
 import GoBackHeader from "../components/_share/GoBackHeader/GoBackHeader";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
-import CategoryListPage from "./CategoryListPage";
 import dateApi from "../utils/withPeriods/classDataByPeriod";
 import { useForm } from "../hooks/useForm";
+
+const CategoryListPage = lazy(() => import("./CategoryListPage" /* webpackChunkName: "category-list-page"*/));
 
 const getInitialState = (transType) => {
   return {
