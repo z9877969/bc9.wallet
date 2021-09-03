@@ -5,6 +5,7 @@ import TransactionPage from "../../pages/TransactionPage";
 import TransactionsHistoryPage from "../../pages/TransactionsHistoryPage";
 import BalancePage from "../../pages/BalancePage";
 import { getFromLS, setToLS } from "../../utils/helpers/withLS";
+import { addTransaction, getTransactions } from "../../utils/api/apiServices";
 
 const App = () => {
   const history = useHistory();
@@ -25,27 +26,27 @@ const App = () => {
     }
   };
 
-
-
   const handleAddTransaction = ({ transaction, transType }) => {
-    transType === "costs" &&
-      setCosts((prevCosts) => [...prevCosts, transaction]);
-    transType === "incomes" &&
-      setIncomes((prevIncomes) => [...prevIncomes, transaction]);
+    addTransaction({ transType, transaction })
+      .then((transaction) => {
+        transType === "costs"
+          ? setCosts((prevCosts) => [...prevCosts, transaction])
+          : setIncomes((prevIncomes) => [...prevIncomes, transaction]);
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    getFromLS("costs", setCosts);
-    getFromLS("incomes", setIncomes);
+    getTransactions("costs")
+      .then((transactions) => setCosts(transactions))
+      .catch((err) => console.log(err));
+    getTransactions("incomes")
+      .then((transactions) => setIncomes(transactions))
+      .catch((err) => console.log(err));
     getFromLS("costsCat", setCostsCat);
     getFromLS("incomesCat", setIncomesCat);
   }, []);
-  useEffect(() => {
-    setToLS("costs", costs);
-  }, [costs]);
-  useEffect(() => {
-    setToLS("incomes", incomes);
-  }, [incomes]);
+
   useEffect(() => {
     setToLS("costsCat", costsCat);
   }, [costsCat]);
@@ -59,11 +60,7 @@ const App = () => {
         path="/"
         exact
         render={(props) => (
-          <MainPage
-            {...props}
-            costs={costs}
-            incomes={incomes}
-          />
+          <MainPage {...props} costs={costs} incomes={incomes} />
         )}
       />
       <Route
@@ -74,35 +71,16 @@ const App = () => {
             handleAddTransaction={handleAddTransaction}
             handleAddCategory={handleAddCategory}
             costsCategoryList={costsCat}
+            incomesCategoryList={incomesCat}
           />
         )}
       />
       <Route path="/balance" component={BalancePage} />
       <Route path="/history/:transType">
-        <TransactionsHistoryPage
-          transactions={{ incomes, costs }}
-        // handleReturnToMainPage={handleReturnToMainPage}
-        />
+        <TransactionsHistoryPage transactions={{ incomes, costs }} />
       </Route>
     </Switch>
   );
 };
 
 export default App;
-
-// switch (mainInfoType) {
-//   case "costsHistory":
-//     return (
-//       <TransactionsHistoryPage
-//         transactions={costs}
-//         handleReturnToMainPage={handleReturnToMainPage}
-//       />
-//     );
-//   case "incomesHistory":
-//     return (
-//       <TransactionsHistoryPage
-//         transactions={incomes}
-//         handleReturnToMainPage={handleReturnToMainPage}
-//       />
-//     );
-// }

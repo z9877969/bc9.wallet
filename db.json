@@ -1,0 +1,44 @@
+{
+  "costs": [
+    {
+      "date": "2021-09-03",
+      "time": "03:38",
+      "category": "Напитки",
+      "sum": "1000",
+      "currency": "USD",
+      "comment": "sdfsdfdsfdfs",
+      "id": 1
+    },
+    {
+      "date": "2021-09-03",
+      "time": "03:50",
+      "category": "Спорт",
+      "sum": "1000",
+      "currency": "USD",
+      "comment": "sdfsdfdsfdfs",
+      "id": 2
+    }
+  ],
+  "incomes": [
+    {
+      "date": "2021-09-03",
+      "time": "03:46",
+      "category": "Премия",
+      "sum": "20000",
+      "currency": "USD",
+      "comment": "sdfsdfdsfdfs",
+      "id": 1
+    },
+    {
+      "date": "2021-09-03",
+      "time": "03:51",
+      "category": "Откат",
+      "sum": "1000",
+      "currency": "USD",
+      "comment": "sdfsdfdsfdfs",
+      "id": 2
+    }
+  ],
+  "costs-cat": [],
+  "incomes-cat": []
+}
