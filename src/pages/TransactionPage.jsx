@@ -16,7 +16,6 @@ const getInitialState = (transType) => {
     sum: "",
     currency: "USD",
     comment: "",
-    isCatList: false,
   };
 };
 
@@ -27,7 +26,7 @@ const TransactionPage = (props) => {
     handleAddTransaction,
     costsCategoryList,
     incomesCategoryList,
-    handleAddCategory
+    handleAddCategory,
   } = props;
 
   const {
@@ -40,9 +39,9 @@ const TransactionPage = (props) => {
     history.push(
       typeof isGoBack === "object"
         ? {
-          pathname: `/transaction/${transType}/cat-list`,
-          state: { from: history.location },
-        }
+            pathname: `/transaction/${transType}/cat-list`,
+            state: { from: history.location },
+          }
         : history.location.state?.from || "/"
     );
   };
@@ -52,9 +51,9 @@ const TransactionPage = (props) => {
     handleClickCb: () => {
       handleToggleCatList();
     },
-    onSubmit: (dataForm) => {
+    onSubmit: (transaction) => {
       handleAddTransaction({
-        transaction: { id: shortid.generate(), ...dataForm },
+        transaction,
         transType,
       });
       history.push(history.location.state?.from || "/");
