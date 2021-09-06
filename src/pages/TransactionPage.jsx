@@ -1,13 +1,20 @@
 import { useMemo, lazy } from "react";
 import { Route, Switch } from "react-router-dom";
+import { connect } from "react-redux";
 import shortid from "shortid";
 import BaseSection from "../components/_share/BaseSection/BaseSection";
 import GoBackHeader from "../components/_share/GoBackHeader/GoBackHeader";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
 import dateApi from "../utils/withPeriods/classDataByPeriod";
 import { useForm } from "../hooks/useForm";
+import {
+  addCosts,
+  addIncomes,
+} from "../redux/transactions/transactionsActions";
 
-const CategoryListPage = lazy(() => import("./CategoryListPage" /* webpackChunkName: "category-list-page"*/));
+const CategoryListPage = lazy(() =>
+  import("./CategoryListPage" /* webpackChunkName: "category-list-page"*/)
+);
 
 const getInitialState = (transType) => {
   return {
@@ -24,10 +31,11 @@ const TransactionPage = (props) => {
   const {
     match,
     history,
-    handleAddTransaction,
     costsCategoryList,
     incomesCategoryList,
     handleAddCategory,
+    addIncomes,
+    addCosts,
   } = props;
 
   const {
@@ -47,16 +55,18 @@ const TransactionPage = (props) => {
     );
   };
 
+  const handleAddTransaction = (transaction) => {
+    transType === "incomes" && addIncomes(transaction);
+    transType === "costs" && addCosts(transaction);
+  };
+
   const formik = useForm({
     initialState,
     handleClickCb: () => {
       handleToggleCatList();
     },
     onSubmit: (transaction) => {
-      handleAddTransaction({
-        transaction,
-        transType,
-      });
+      handleAddTransaction(transaction);
       history.push(history.location.state?.from || "/");
     },
   });
@@ -97,4 +107,17 @@ const TransactionPage = (props) => {
   );
 };
 
-export default TransactionPage;
+const mapDispatchToProps = (dispatch) => ({
+  addCosts: (transaction) => {
+    dispatch(addCosts(transaction));
+  },
+  addIncomes: (transaction) => {
+    dispatch(addIncomes(transaction));
+  },
+});
+
+export default connect(null, mapDispatchToProps)(TransactionPage);
+
+// const coNnect = (mSTP, mDTP) => (WrappedComponent) => (props) => {
+//   return <WrappedComponent {...props} {...stateProps} {...actionProps} />;
+// };

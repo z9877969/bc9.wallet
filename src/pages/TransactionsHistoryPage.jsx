@@ -1,5 +1,6 @@
 import { useState, lazy } from "react";
-import { useHistory, useParams, useRouteMatch, Route, Switch } from "react-router-dom";
+import { connect } from "react-redux";
+import { useHistory, useParams, Route, Switch } from "react-router-dom";
 import DatePaginator from "../components/DatePaginator/DatePaginator";
 import HistoryTable from "../components/HistoryTable/HistoryTable";
 import GoBackHeader from "../components/_share/GoBackHeader/GoBackHeader";
@@ -8,27 +9,33 @@ import HistoryHeaderBtns from "../components/HistoryHeaderBtns/HistoryHeaderBtns
 import MenuList from "../components/MenuList/MenuList";
 import periodList from "../assets/periodList.json";
 import dateApi from "../utils/withPeriods/classDataByPeriod";
-const CategoryDetailsList = lazy(() => import("../components/CategoryDetailsList/CategoryDetailsList"  /* webpackChunkName: "category-details-list"*/)) ;
+const CategoryDetailsList = lazy(() =>
+  import(
+    "../components/CategoryDetailsList/CategoryDetailsList" /* webpackChunkName: "category-details-list"*/
+  )
+);
 
-const TransactionsHistoryPage = ({ handleReturnToMainPage, transactions }) => {
+const TransactionsHistoryPage = ({
+  handleReturnToMainPage,
+  incomes,
+  costs,
+}) => {
   const history = useHistory();
   const { transType } = useParams();
   const [isOpenPeriodList, setIsOpenPeriodList] = useState(false);
   const [touchedPeriod, setTouchedPeriod] = useState(periodList[0]);
   const [thouchedDate, setThouchedDate] = useState(dateApi.current);
   const [categoryDetailsName, setCategoryDetailsName] = useState("");
-  const curTransactions = transactions[transType];
-
-
+  // const curTransactions = transactions && transactions[transType] || [];
+  const curTransactions = transType === "incomes" ? incomes : costs;
 
   const onOpenCategoryDetails = (category) => {
     const nextLocation = {
       pathname: `/history/${transType}/details`,
-      state: { from: history.location }
-    }
+      state: { from: history.location },
+    };
     setCategoryDetailsName(category);
     history.push(nextLocation);
-
   };
 
   const onTogglePeriodList = () => {
@@ -54,10 +61,9 @@ const TransactionsHistoryPage = ({ handleReturnToMainPage, transactions }) => {
     date: thouchedDate,
     period: touchedPeriod.name,
   });
-  console.log(transactions)
+  
   return (
     <BaseSection>
-
       <Switch>
         <Route path="/history/:transType/details">
           <GoBackHeader title={categoryDetailsName} />
@@ -95,4 +101,9 @@ const TransactionsHistoryPage = ({ handleReturnToMainPage, transactions }) => {
   );
 };
 
-export default TransactionsHistoryPage;
+const mapStateToProps = (state) => ({
+  costs: state.transactions.costs,
+  incomes: state.transactions.incomes,
+});
+
+export default connect(mapStateToProps)(TransactionsHistoryPage);
