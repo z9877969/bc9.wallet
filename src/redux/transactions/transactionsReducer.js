@@ -1,23 +1,15 @@
-import { combineReducers } from "redux";
+// import { combineReducers } from "redux";
+import { combineReducers, createReducer } from "@reduxjs/toolkit";
 import types from "./transactionsActionTypes";
 
-export const costsReducer = (state = [], action) => {
-  switch (action.type) {
-    case types.ADD_COSTS:
-      return [...state, action.payload];
-    default:
-      return state;
-  }
-};
 
-export const incomesReducer = (state = [], { type, payload }) => {
-  switch (type) {
-    case types.ADD_INCOMES:
-      return [...state, payload];
-    default:
-      return state;
-  }
-};
+const costsReducer = createReducer([], {
+  [types.ADD_COSTS]: (state, {payload}) => [...state, payload]
+});
+
+const incomesReducer = createReducer([], {
+  [types.ADD_INCOMES]: (state, {payload}) => [...state, payload]
+})
 
 const transactionsReducer = combineReducers({
   costs: costsReducer,

@@ -1,11 +1,8 @@
+import { createAction } from "@reduxjs/toolkit";
 import types from "./transactionsActionTypes";
 
-export const addCosts = (transaction) => ({
-  type: types.ADD_COSTS,
-  payload: transaction,
-});
+export const addCosts = createAction(types.ADD_COSTS);
 
-export const addIncomes = (transaction) => ({
-  type: types.ADD_INCOMES,
-  payload: transaction,
-});
+export const addIncomes = createAction(types.ADD_INCOMES);
+
+

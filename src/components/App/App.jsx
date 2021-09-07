@@ -23,21 +23,21 @@ const BalancePage = lazy(() =>
 const App = () => {
   const history = useHistory();
 
-  const [costs, setCosts] = useState([]);
-  const [incomes, setIncomes] = useState([]);
-  const [costsCat, setCostsCat] = useState([]);
-  const [incomesCat, setIncomesCat] = useState([]);
+  // const [costs, setCosts] = useState([]);
+  // const [incomes, setIncomes] = useState([]);
+  // const [costsCat, setCostsCat] = useState([]);
+  // const [incomesCat, setIncomesCat] = useState([]);
 
-  const handleAddCategory = ({ transType, category }) => {
-    switch (transType) {
-      case "incomes":
-        return setIncomesCat((prevIncomesCat) => [...prevIncomesCat, category]);
-      case "costs":
-        return setCostsCat((prevCostsCat) => [...prevCostsCat, category]);
-      default:
-        return;
-    }
-  };
+  // const handleAddCategory = ({ transType, category }) => {
+  //   switch (transType) {
+  //     case "incomes":
+  //       return setIncomesCat((prevIncomesCat) => [...prevIncomesCat, category]);
+  //     case "costs":
+  //       return setCostsCat((prevCostsCat) => [...prevCostsCat, category]);
+  //     default:
+  //       return;
+  //   }
+  // };
 
   // const handleAddTransaction = ({ transaction, transType }) => {
   //   addTransaction({ transType, transaction })
@@ -49,23 +49,23 @@ const App = () => {
   //     .catch((err) => console.log(err));
   // };
 
-  useEffect(() => {
-    getTransactions("costs")
-      .then((transactions) => setCosts(transactions))
-      .catch((err) => console.log(err));
-    getTransactions("incomes")
-      .then((transactions) => setIncomes(transactions))
-      .catch((err) => console.log(err));
-    getFromLS("costsCat", setCostsCat);
-    getFromLS("incomesCat", setIncomesCat);
-  }, []);
+  // useEffect(() => {
+  //   getTransactions("costs")
+  //     .then((transactions) => setCosts(transactions))
+  //     .catch((err) => console.log(err));
+  //   getTransactions("incomes")
+  //     .then((transactions) => setIncomes(transactions))
+  //     .catch((err) => console.log(err));
+  //   getFromLS("costsCat", setCostsCat);
+  //   getFromLS("incomesCat", setIncomesCat);
+  // }, []);
 
-  useEffect(() => {
-    setToLS("costsCat", costsCat);
-  }, [costsCat]);
-  useEffect(() => {
-    setToLS("incomesCat", incomesCat);
-  }, [incomesCat]);
+  // useEffect(() => {
+  //   setToLS("costsCat", costsCat);
+  // }, [costsCat]);
+  // useEffect(() => {
+  //   setToLS("incomesCat", incomesCat);
+  // }, [incomesCat]);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -74,20 +74,12 @@ const App = () => {
           path="/"
           exact
           render={(props) => (
-            <MainPage {...props} costs={costs} incomes={incomes} />
+            <MainPage {...props} costs={[]} incomes={[]} />
           )}
         />
         <Route
           path="/transaction/:transType"
-          render={(props) => (
-            <TransactionPage
-              {...props}
-              // handleAddTransaction={handleAddTransaction}
-              handleAddCategory={handleAddCategory}
-              costsCategoryList={costsCat}
-              incomesCategoryList={incomesCat}
-            />
-          )}
+          component={TransactionPage}
         />
         <Route path="/balance" component={BalancePage} />
         <Route path="/history/:transType">
