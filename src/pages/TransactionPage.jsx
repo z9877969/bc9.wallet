@@ -1,6 +1,6 @@
 import { useMemo, lazy } from "react";
 import { Route, Switch } from "react-router-dom";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import shortid from "shortid";
 import BaseSection from "../components/_share/BaseSection/BaseSection";
 import GoBackHeader from "../components/_share/GoBackHeader/GoBackHeader";
@@ -11,6 +11,7 @@ import {
   addCosts,
   addIncomes,
 } from "../redux/transactions/transactionsActions";
+import { addCostsCat, addIncomesCat } from '../redux/categories/categories-actions'
 
 const CategoryListPage = lazy(() =>
   import("./CategoryListPage" /* webpackChunkName: "category-list-page"*/)
@@ -33,10 +34,20 @@ const TransactionPage = (props) => {
     history,
     costsCategoryList,
     incomesCategoryList,
-    handleAddCategory,
-    addIncomes,
-    addCosts,
   } = props;
+   const dispatch = useDispatch();
+   const categoryList = useSelector(state => state.categories)
+
+  const handleAddCategory = ({ transType, category }) => {
+    switch (transType) {
+      case "incomes":
+        return dispatch(addIncomesCat(category));
+      case "costs":
+        return dispatch(addCostsCat(category));
+      default:
+        return;
+    }
+  };
 
   const {
     params: { transType },
@@ -56,8 +67,8 @@ const TransactionPage = (props) => {
   };
 
   const handleAddTransaction = (transaction) => {
-    transType === "incomes" && addIncomes(transaction);
-    transType === "costs" && addCosts(transaction);
+    transType === "incomes" && dispatch(addIncomes(transaction));
+    transType === "costs" && dispatch(addCosts(transaction));
   };
 
   const formik = useForm({
@@ -84,9 +95,10 @@ const TransactionPage = (props) => {
               handleSetCategory={formik.handleSetDataByClick}
               handleAddCategory={handleAddCategory}
               categoryList={
-                transType === "incomes"
-                  ? incomesCategoryList
-                  : costsCategoryList
+                categoryList[transType + "Cat"]
+                // transType === "incomes"
+                //   ? incomesCategoryList
+                //   : costsCategoryList
               }
             />
           )}
@@ -107,16 +119,8 @@ const TransactionPage = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  addCosts: (transaction) => {
-    dispatch(addCosts(transaction));
-  },
-  addIncomes: (transaction) => {
-    dispatch(addIncomes(transaction));
-  },
-});
 
-export default connect(null, mapDispatchToProps)(TransactionPage);
+export default TransactionPage;
 
 // const coNnect = (mSTP, mDTP) => (WrappedComponent) => (props) => {
 //   return <WrappedComponent {...props} {...stateProps} {...actionProps} />;

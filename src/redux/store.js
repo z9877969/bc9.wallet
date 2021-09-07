@@ -1,17 +1,44 @@
-import { createStore, applyMiddleware, combineReducers } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
+import { configureStore } from "@reduxjs/toolkit";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from 'redux-persist/lib/storage';
 import transactions from "./transactions/transactionsReducer";
+import categories from './categories/categoriesReducer'
 
-const rootReducer = combineReducers({
-  transactions,
+
+const transactionsPersistConfig = {
+  key: 'transactions',
+  version: 1,
+  storage,
+}
+
+const categoriesPersistConfig = {
+  key: 'categories',
+  version: 1,
+  storage,
+}
+
+const store = configureStore({
+  reducer: { 
+    transactions: persistReducer(transactionsPersistConfig, transactions),
+    categories: persistReducer(categoriesPersistConfig, categories),
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(
-    applyMiddleware()
-    // other store enhancers if any
-  )
-);
+export const persistor = persistStore(store);
 
 export default store;
