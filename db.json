@@ -17,6 +17,15 @@
       "currency": "USD",
       "comment": "sdfsdfdsfdfs",
       "id": 2
+    },
+    {
+      "date": "2021-09-06",
+      "time": "04:03",
+      "category": "Еда",
+      "sum": "15000",
+      "currency": "USD",
+      "comment": "sdfgsdfg",
+      "id": 3
     }
   ],
   "incomes": [
@@ -37,6 +46,15 @@
       "currency": "USD",
       "comment": "sdfsdfdsfdfs",
       "id": 2
+    },
+    {
+      "date": "2021-09-07",
+      "time": "04:03",
+      "category": "Зарплата",
+      "sum": "60000",
+      "currency": "USD",
+      "comment": "",
+      "id": 3
     }
   ],
   "costs-cat": [],

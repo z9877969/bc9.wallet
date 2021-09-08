@@ -11,7 +11,8 @@ import {
 } from "redux-persist";
 import storage from 'redux-persist/lib/storage';
 import transactions from "./transactions/transactionsReducer";
-import categories from './categories/categoriesReducer'
+import categories from './categories/categoriesReducer';
+import error from './error/errorReducer';
 
 
 const transactionsPersistConfig = {
@@ -30,6 +31,7 @@ const store = configureStore({
   reducer: { 
     transactions: persistReducer(transactionsPersistConfig, transactions),
     categories: persistReducer(categoriesPersistConfig, categories),
+    error
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

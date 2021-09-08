@@ -2,15 +2,9 @@ import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:4040/";
 
-export const addTransaction = ({ transType, transaction }) => {
+export const addTransactionApi = ({ transType, transaction }) => {
   return axios
-    .post(transType, transaction, {
-      params: {
-        key: "654654654",
-        page: 21,
-        search: "321321",
-      },
-    })
+    .post(transType, transaction)
     .then(({ data }) => data)
     .catch((err) => {
       throw err;
@@ -25,6 +19,7 @@ export const getTransactions = (transType) => {
       throw err;
     });
 };
+
 
 // const queryString =
 //   baseUrl +
