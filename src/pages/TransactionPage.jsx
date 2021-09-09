@@ -7,11 +7,11 @@ import GoBackHeader from "../components/_share/GoBackHeader/GoBackHeader";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
 import dateApi from "../utils/withPeriods/classDataByPeriod";
 import { useForm } from "../hooks/useForm";
+import { addTransaction } from "../redux/transactions/transactionsOperation";
 import {
-  addCosts,
-  addIncomes,
-} from "../redux/transactions/transactionsActions";
-import { addCostsCat, addIncomesCat } from '../redux/categories/categories-actions'
+  addCostsCat,
+  addIncomesCat,
+} from "../redux/categories/categories-actions";
 
 const CategoryListPage = lazy(() =>
   import("./CategoryListPage" /* webpackChunkName: "category-list-page"*/)
@@ -29,14 +29,9 @@ const getInitialState = (transType) => {
 };
 
 const TransactionPage = (props) => {
-  const {
-    match,
-    history,
-    costsCategoryList,
-    incomesCategoryList,
-  } = props;
-   const dispatch = useDispatch();
-   const categoryList = useSelector(state => state.categories)
+  const { match, history, costsCategoryList, incomesCategoryList } = props;
+  const dispatch = useDispatch();
+  const categoryList = useSelector((state) => state.categories);
 
   const handleAddCategory = ({ transType, category }) => {
     switch (transType) {
@@ -67,8 +62,7 @@ const TransactionPage = (props) => {
   };
 
   const handleAddTransaction = (transaction) => {
-    transType === "incomes" && dispatch(addIncomes(transaction));
-    transType === "costs" && dispatch(addCosts(transaction));
+    dispatch(addTransaction({ transType, transaction }));
   };
 
   const formik = useForm({
@@ -118,7 +112,6 @@ const TransactionPage = (props) => {
     </BaseSection>
   );
 };
-
 
 export default TransactionPage;
 

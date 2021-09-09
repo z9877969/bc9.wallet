@@ -1,7 +1,7 @@
-import { useEffect, useState, lazy, Suspense } from "react";
-import { Route, Switch, useHistory } from "react-router-dom";
-import { getFromLS, setToLS } from "../../utils/helpers/withLS";
-import { addTransaction, getTransactions } from "../../utils/api/apiServices";
+import { useEffect, lazy, Suspense } from "react";
+import { Route, Switch, } from "react-router-dom";
+import { getCosts, getIncomes } from "../../redux/transactions/transactionsOperation";
+import { useDispatch } from "react-redux";
 
 const MainPage = lazy(() =>
   import("../../pages/MainPage" /*webpackChunkName: "main-page" */)
@@ -14,58 +14,20 @@ const TransactionPage = lazy(() =>
 const TransactionsHistoryPage = lazy(() =>
   import(
     "../../pages/TransactionsHistoryPage" /*webpackChunkName: "transactions-history-page" */
-  )
-);
-const BalancePage = lazy(() =>
-  import("../../pages/BalancePage" /*webpackChunkName: "balance-page" */)
-);
+    )
+    );
+    const BalancePage = lazy(() =>
+    import("../../pages/BalancePage" /*webpackChunkName: "balance-page" */)
+    );
+    
+    const App = () => {
+  const dispatch = useDispatch()
 
-const App = () => {
-  const history = useHistory();
+   useEffect(() => {
+    dispatch(getCosts());
+    dispatch(getIncomes());
+  }, [dispatch]);
 
-  // const [costs, setCosts] = useState([]);
-  // const [incomes, setIncomes] = useState([]);
-  // const [costsCat, setCostsCat] = useState([]);
-  // const [incomesCat, setIncomesCat] = useState([]);
-
-  // const handleAddCategory = ({ transType, category }) => {
-  //   switch (transType) {
-  //     case "incomes":
-  //       return setIncomesCat((prevIncomesCat) => [...prevIncomesCat, category]);
-  //     case "costs":
-  //       return setCostsCat((prevCostsCat) => [...prevCostsCat, category]);
-  //     default:
-  //       return;
-  //   }
-  // };
-
-  // const handleAddTransaction = ({ transaction, transType }) => {
-  //   addTransaction({ transType, transaction })
-  //     .then((transaction) => {
-  //       transType === "costs"
-  //         ? setCosts((prevCosts) => [...prevCosts, transaction])
-  //         : setIncomes((prevIncomes) => [...prevIncomes, transaction]);
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-
-  // useEffect(() => {
-  //   getTransactions("costs")
-  //     .then((transactions) => setCosts(transactions))
-  //     .catch((err) => console.log(err));
-  //   getTransactions("incomes")
-  //     .then((transactions) => setIncomes(transactions))
-  //     .catch((err) => console.log(err));
-  //   getFromLS("costsCat", setCostsCat);
-  //   getFromLS("incomesCat", setIncomesCat);
-  // }, []);
-
-  // useEffect(() => {
-  //   setToLS("costsCat", costsCat);
-  // }, [costsCat]);
-  // useEffect(() => {
-  //   setToLS("incomesCat", incomesCat);
-  // }, [incomesCat]);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
