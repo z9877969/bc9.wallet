@@ -21,6 +21,7 @@ import {
 } from "../redux/transactions/transactionsSelectors";
 import { useEffect } from "react";
 import {
+  resetType,
   setCostsType,
   setIncomesType,
 } from "../redux/transactions/transactionsActions";
@@ -81,6 +82,7 @@ const TransactionsHistoryPage = () => {
     transType === "incomes"
       ? dispatch(setIncomesType())
       : dispatch(setCostsType());
+    return () => dispatch(resetType());
   }, []);
 
   return (
