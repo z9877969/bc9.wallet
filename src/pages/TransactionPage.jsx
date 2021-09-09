@@ -12,6 +12,13 @@ import {
   addCostsCat,
   addIncomesCat,
 } from "../redux/categories/categories-actions";
+import { useEffect } from "react";
+import {
+  resetType,
+  setCostsType,
+  setIncomesType,
+} from "../redux/transactions/transactionsActions";
+import { getTranstype } from "../redux/transactions/transactionsSelectors";
 
 const CategoryListPage = lazy(() =>
   import("./CategoryListPage" /* webpackChunkName: "category-list-page"*/)
@@ -29,9 +36,10 @@ const getInitialState = (transType) => {
 };
 
 const TransactionPage = (props) => {
-  const { match, history, costsCategoryList, incomesCategoryList } = props;
+  const { match, history } = props;
   const dispatch = useDispatch();
   const categoryList = useSelector((state) => state.categories);
+  const transType = useSelector(getTranstype);
 
   const handleAddCategory = ({ transType, category }) => {
     switch (transType) {
@@ -43,10 +51,6 @@ const TransactionPage = (props) => {
         return;
     }
   };
-
-  const {
-    params: { transType },
-  } = match;
 
   const initialState = useMemo(() => getInitialState(transType), []);
 
@@ -76,6 +80,17 @@ const TransactionPage = (props) => {
     },
   });
 
+  useEffect(() => {
+    const {
+      params: { transType },
+    } = match;
+    transType === "incomes"
+      ? dispatch(setIncomesType())
+      : dispatch(setCostsType());
+
+    return () => dispatch(resetType());
+  }, []);
+
   return (
     <BaseSection>
       <Switch>
@@ -90,9 +105,6 @@ const TransactionPage = (props) => {
               handleAddCategory={handleAddCategory}
               categoryList={
                 categoryList[transType + "Cat"]
-                // transType === "incomes"
-                //   ? incomesCategoryList
-                //   : costsCategoryList
               }
             />
           )}

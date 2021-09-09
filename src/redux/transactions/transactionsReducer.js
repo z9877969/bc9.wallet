@@ -4,6 +4,9 @@ import {
   addIncomesSuccess,
   getCostsSuccess,
   getIncomesSuccess,
+  resetType,
+  setCostsType,
+  setIncomesType,
 } from "./transactionsActions";
 
 const costsReducer = createReducer([], {
