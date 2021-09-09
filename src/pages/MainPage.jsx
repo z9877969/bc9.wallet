@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import BaseSection from "../components/_share/BaseSection/BaseSection";
 import MainInfo from "../components/MainInfo/MainInfo";
 import ButtonsToHistory from "../components/ButtonsToHistory/ButtonsToHistory";
@@ -6,30 +7,32 @@ import {
   costsMainInfo,
   balanceMainInfo,
 } from "../assets/mainInfo.json";
+import { getTransactions } from "../redux/transactions/transactionsSelectors";
 
-const MainPage = ({ costs, incomes, history }) => {
+const MainPage = ({ history }) => {
+  const { incomes, costs } = useSelector(getTransactions);
 
   const handleOpenTransaction = (transType) => {
     const nextLocation =
       transType === "balance"
         ? {
-          pathname: `/${transType}`,
-          state: { from: history.location },
-        }
+            pathname: `/${transType}`,
+            state: { from: history.location },
+          }
         : {
-          pathname: `/transaction/${transType}`,
-          state: { from: history.location },
-        };
+            pathname: `/transaction/${transType}`,
+            state: { from: history.location },
+          };
     history.push(nextLocation);
   };
 
   const handleOpenHistory = (transType) => {
     const nextLocation = {
       pathname: `/history/${transType}`,
-      state: { from: history.location }
-    }
+      state: { from: history.location },
+    };
     history.push(nextLocation);
-  }
+  };
 
   return (
     <BaseSection title={"Журнал расходов"}>
@@ -58,7 +61,7 @@ const MainPage = ({ costs, incomes, history }) => {
         titleColor="balance"
         mainInfoType="balance"
         buttonIcon="icon-navigation-more"
-      // transactions={}
+        // transactions={}
       />
       <ButtonsToHistory handleOpenTransaction={handleOpenHistory} />
     </BaseSection>

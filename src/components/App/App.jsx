@@ -35,14 +35,9 @@ const TransactionsHistoryPage = lazy(() =>
         <Route
           path="/"
           exact
-          render={(props) => (
-            <MainPage {...props} costs={[]} incomes={[]} />
-          )}
+          render={(props) => <MainPage {...props} />}
         />
-        <Route
-          path="/transaction/:transType"
-          component={TransactionPage}
-        />
+        <Route path="/transaction/:transType" component={TransactionPage} />
         <Route path="/balance" component={BalancePage} />
         <Route path="/history/:transType">
           <TransactionsHistoryPage />
