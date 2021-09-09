@@ -1,7 +1,7 @@
-import { useEffect, useState, lazy, Suspense } from "react";
-import { Route, Switch, useHistory } from "react-router-dom";
-import { getFromLS, setToLS } from "../../utils/helpers/withLS";
-import { addTransaction, getTransactions } from "../../utils/api/apiServices";
+import { useEffect, lazy, Suspense } from "react";
+import { Route, Switch, } from "react-router-dom";
+import { getCosts, getIncomes } from "../../redux/transactions/transactionsOperation";
+import { useDispatch } from "react-redux";
 
 const MainPage = lazy(() =>
   import("../../pages/MainPage" /*webpackChunkName: "main-page" */)
@@ -14,14 +14,20 @@ const TransactionPage = lazy(() =>
 const TransactionsHistoryPage = lazy(() =>
   import(
     "../../pages/TransactionsHistoryPage" /*webpackChunkName: "transactions-history-page" */
-  )
-);
-const BalancePage = lazy(() =>
-  import("../../pages/BalancePage" /*webpackChunkName: "balance-page" */)
-);
+    )
+    );
+    const BalancePage = lazy(() =>
+    import("../../pages/BalancePage" /*webpackChunkName: "balance-page" */)
+    );
+    
+    const App = () => {
+  const dispatch = useDispatch()
 
-const App = () => {
-  const history = useHistory();
+   useEffect(() => {
+    dispatch(getCosts());
+    dispatch(getIncomes());
+  }, [dispatch]);
+
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

@@ -1,13 +1,19 @@
-// import { combineReducers } from "redux";
 import { combineReducers, createReducer } from "@reduxjs/toolkit";
-import types from "./transactionsActionTypes";
+import {
+  addCostsSuccess,
+  addIncomesSuccess,
+  getCostsSuccess,
+  getIncomesSuccess,
+} from "./transactionsActions";
 
 const costsReducer = createReducer([], {
-  [types.ADD_COSTS]: (state, { payload }) => [...state, payload],
+  [addCostsSuccess]: (state, { payload }) => [...state, payload],
+  [getCostsSuccess]: (_, { payload }) => payload,
 });
 
 const incomesReducer = createReducer([], {
-  [types.ADD_INCOMES]: (state, { payload }) => [...state, payload],
+  [addIncomesSuccess]: (state, { payload }) => [...state, payload],
+  [getIncomesSuccess]: (_, { payload }) => payload,
 });
 
 const transTypeReducer = createReducer("", {
