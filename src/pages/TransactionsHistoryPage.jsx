@@ -1,5 +1,5 @@
 import { useState, lazy } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useHistory, useParams, Route, Switch } from "react-router-dom";
 import DatePaginator from "../components/DatePaginator/DatePaginator";
 import HistoryTable from "../components/HistoryTable/HistoryTable";
@@ -9,6 +9,7 @@ import HistoryHeaderBtns from "../components/HistoryHeaderBtns/HistoryHeaderBtns
 import MenuList from "../components/MenuList/MenuList";
 import periodList from "../assets/periodList.json";
 import dateApi from "../utils/withPeriods/classDataByPeriod";
+import { getTransactions } from "../redux/transactions/transactionsSelectors";
 const CategoryDetailsList = lazy(() =>
   import(
     "../components/CategoryDetailsList/CategoryDetailsList" /* webpackChunkName: "category-details-list"*/
@@ -22,6 +23,9 @@ const TransactionsHistoryPage = ({
 }) => {
   const history = useHistory();
   const { transType } = useParams();
+
+  const transactions = useSelector(getTransactions)
+
   const [isOpenPeriodList, setIsOpenPeriodList] = useState(false);
   const [touchedPeriod, setTouchedPeriod] = useState(periodList[0]);
   const [thouchedDate, setThouchedDate] = useState(dateApi.current);
@@ -101,9 +105,9 @@ const TransactionsHistoryPage = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  costs: state.transactions.costs,
-  incomes: state.transactions.incomes,
-});
+// const mapStateToProps = (state) => ({
+//   costs: state.transactions.costs,
+//   incomes: state.transactions.incomes,
+// });
 
-export default connect(mapStateToProps)(TransactionsHistoryPage);
+export default TransactionsHistoryPage;
