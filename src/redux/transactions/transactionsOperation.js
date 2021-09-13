@@ -17,6 +17,8 @@ import {
   getIncomesSuccess,
 } from "./transactionsActions";
 
+
+
 export const addTransaction =
   ({ transType, transaction }) =>
   async (dispatch) => {
@@ -42,6 +44,7 @@ export const getCosts = () => async (dispatch) => {
   dispatch(getCostsRequests());
   try {
     const costs = await getTransactions("costs");
+    
     dispatch(getCostsSuccess(costs));
   } catch (error) {
     dispatch(getCostsError(error));

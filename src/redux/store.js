@@ -14,6 +14,7 @@ import transactions from "./transactions/transactionsReducer";
 import categories from "./categories/categoriesReducer";
 import error from "./error/errorReducer";
 import history from "./history/historyReducer";
+import auth from "./auth/authReducer";
 
 const transactionsPersistConfig = {
   key: "transactions",
@@ -29,6 +30,7 @@ const categoriesPersistConfig = {
 
 const store = configureStore({
   reducer: {
+    auth,
     transactions,
     categories: persistReducer(categoriesPersistConfig, categories),
     history,
