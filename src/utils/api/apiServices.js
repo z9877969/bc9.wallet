@@ -8,35 +8,90 @@ const updateDataObj = (dataObj) =>
       })
     : [];
 
-axios.defaults.baseURL =
-  "https://bootcamp9-ad563-default-rtdb.europe-west1.firebasedatabase.app";
+const API_KEY = "AIzaSyCDoK_rPVNuzMuGqXkXuMfqv8h_fAH2ETs";
 
-// /transactions/costs.json
+const baseUrl = {
+  AUTH: "https://identitytoolkit.googleapis.com/v1/",
+  DB: "https://bootcamp9-ad563-default-rtdb.europe-west1.firebasedatabase.app",
+};
 
-export const addTransactionApi = ({ transType, transaction }) => {
+const endPoint = {
+  REGISTER: "accounts:signUp",
+  LOGIN: "accounts:signInWithPassword",
+};
+
+const setBaseUrl = (url) => (axios.defaults.baseURL = url);
+const setParams = (params) => (axios.defaults.params = params);
+
+const setToken = (token) => (axios.defaults.params = { auth: token });
+
+export const userRegisterApi = (userData) => {
+  setBaseUrl(baseUrl.AUTH);
+  setParams({
+    key: API_KEY,
+  });
   return axios
-    .post("/transactions/" + transType + ".json", transaction)
+    .post(endPoint.REGISTER, {
+      ...userData,
+      returnSecureToken: true,
+    })
+    .then(({ data: { email, idToken, localId, refreshToken } }) => {
+      setToken(idToken);
+      return {
+        email,
+        idToken,
+        localId,
+        refreshToken,
+      };
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+export const userLoginApi = (userData) => {
+  setBaseUrl(baseUrl.AUTH);
+  setParams({
+    key: API_KEY,
+  });
+  return axios
+    .post(endPoint.LOGIN, {
+      ...userData,
+      returnSecureToken: true,
+    })
+    .then(({ data: { email, idToken, localId, refreshToken } }) => {
+      setToken(idToken);
+      return {
+        email,
+        idToken,
+        localId,
+        refreshToken,
+      };
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+export const addTransactionApi = ({ transType, transaction, localId }) => {
+  setBaseUrl(baseUrl.DB);
+  return axios
+    .post(
+      "users/" + localId + "/transactions/" + transType + ".json",
+      transaction
+    )
     .then(({ data: { name } }) => ({ id: name, ...transaction }))
     .catch((err) => {
       throw err;
     });
 };
 
-export const getTransactions = (transType) => {
+export const getTransactions = ({ transType, localId }) => {
+  setBaseUrl(baseUrl.DB);
   return axios
-    .get(`/transactions/${transType}.json`)
+    .get(`/users/${localId}/transactions/${transType}.json`)
     .then(({ data }) => updateDataObj(data))
     .catch((err) => {
       throw err;
     });
 };
-
-// https://[PROJECT_ID].firebaseio.com/users/jack/name.json
-
-// const queryString =
-//   baseUrl +
-//   endPoint +
-//   "?" +
-//   Object.entries(params).reduce((acc, [key, value], idx, arr) =>
-//     acc + `${key}=${value}` + idx < arr.length - 1 ? "&" : null
-//   );
