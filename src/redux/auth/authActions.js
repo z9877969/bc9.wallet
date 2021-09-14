@@ -8,4 +8,8 @@ export const userLoginRequest = createAction("auth/userLoginRequest");
 export const userLoginSuccess = createAction("auth/userLoginSuccess");
 export const userLoginError = createAction("auth/userLoginError");
 
-export const userLogout = createAction("auth/userLogoyt")
+export const getCurUserRequest = createAction("auth/getCurUserRequest");
+export const getCurUserSuccess = createAction("auth/getCurUserSuccess");
+export const getCurUserError = createAction("auth/getCurUserError");
+
+export const userLogout = createAction("auth/userLogoyt");

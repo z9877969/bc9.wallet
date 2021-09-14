@@ -6,8 +6,9 @@ import {
 } from "../../redux/transactions/transactionsOperation";
 import { useDispatch, useSelector } from "react-redux";
 import AuthPage from "../../pages/AuthPage";
-import { getIsAuthUser } from "../../redux/auth/authSelectors";
+import { getIdToken, getIsAuthUser } from "../../redux/auth/authSelectors";
 import { userLogout } from "../../redux/auth/authActions";
+import { getCurUser } from "../../redux/auth/authOperations";
 
 const MainPage = lazy(() =>
   import("../../pages/MainPage" /*webpackChunkName: "main-page" */)
@@ -30,6 +31,11 @@ const App = () => {
   const dispatch = useDispatch();
 
   const isAuth = useSelector(getIsAuthUser);
+  const idToken = useSelector(getIdToken)
+
+  useEffect(() => {
+    idToken && dispatch(getCurUser());
+  }, []);
 
   useEffect(() => {
     isAuth && dispatch(getCosts());
@@ -60,7 +66,6 @@ const App = () => {
       ) : (
         <Switch>
           <Route path="/auth/:authType" component={AuthPage} />
-          {/* <Route path="/register" component={AuthPage} /> */}
           <Redirect to="/auth/login" />
         </Switch>
       )}
