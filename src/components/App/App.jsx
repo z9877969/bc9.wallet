@@ -34,7 +34,7 @@ const App = () => {
   useEffect(() => {
     isAuth && dispatch(getCosts());
     isAuth && dispatch(getIncomes());
-  }, [dispatch]);
+  }, [isAuth]);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -46,6 +46,10 @@ const App = () => {
       {isAuth ? (
         <Switch>
           <Route path="/" exact render={(props) => <MainPage {...props} />} />
+          <Route
+            path="/transaction/:transType/:transId"
+            component={TransactionPage}
+          />
           <Route path="/transaction/:transType" component={TransactionPage} />
           <Route path="/balance" component={BalancePage} />
           <Route path="/history/:transType">
