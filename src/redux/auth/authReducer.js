@@ -5,6 +5,7 @@ import {
   userRegisterSuccess,
   userLoginSuccess,
   userLogout,
+  getCurUserSuccess,
 } from "./authActions";
 
 const iS = {
@@ -26,12 +27,17 @@ const userReducer = createReducer(iS.user, {
     _,
     { payload: { email, idToken, localId, refreshToken } }
   ) => ({ email, localId, idToken, refreshToken }),
+  [getCurUserSuccess]: (state, { payload }) => ({
+    ...state,
+    ...payload,
+  }),
   [userLogout]: () => iS.user,
 });
 
 const isAuthReducer = createReducer(iS.isAuth, {
   [userRegisterSuccess]: () => true,
   [userLoginSuccess]: () => true,
+  [getCurUserSuccess]: () => true,
   [userLogout]: () => iS.isAuth,
 });
 

@@ -1,4 +1,8 @@
-import { userLoginApi, userRegisterApi } from "../../utils/api/apiServices";
+import {
+  getCurUserApi,
+  userLoginApi,
+  userRegisterApi,
+} from "../../utils/api/apiServices";
 import {
   userRegisterRequest,
   userRegisterSuccess,
@@ -6,6 +10,9 @@ import {
   userLoginRequest,
   userLoginSuccess,
   userLoginError,
+  getCurUserRequest,
+  getCurUserSuccess,
+  getCurUserError,
 } from "./authActions";
 
 export const userRegister = (userData) => (dispatch) => {
@@ -22,4 +29,14 @@ export const userLogin = (userData) => (dispatch) => {
   userLoginApi(userData)
     .then((userRes) => dispatch(userLoginSuccess(userRes)))
     .catch((err) => dispatch(userLoginError(err)));
+};
+
+export const getCurUser = () => (dispatch, getState) => {
+  dispatch(getCurUserRequest());
+
+  const { idToken } = getState().auth.user;
+
+  getCurUserApi(idToken)
+    .then((userRes) => dispatch(getCurUserSuccess(userRes)))
+    .catch((err) => dispatch(getCurUserError(err)));
 };

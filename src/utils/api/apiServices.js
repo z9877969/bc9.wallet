@@ -10,6 +10,8 @@ const updateDataObj = (dataObj) =>
 
 const API_KEY = "AIzaSyCDoK_rPVNuzMuGqXkXuMfqv8h_fAH2ETs";
 
+// key=[API_KEY]
+
 const baseUrl = {
   AUTH: "https://identitytoolkit.googleapis.com/v1/",
   DB: "https://bootcamp9-ad563-default-rtdb.europe-west1.firebasedatabase.app",
@@ -18,6 +20,7 @@ const baseUrl = {
 const endPoint = {
   REGISTER: "accounts:signUp",
   LOGIN: "accounts:signInWithPassword",
+  GET_USER: "accounts:lookup",
 };
 
 const setBaseUrl = (url) => (axios.defaults.baseURL = url);
@@ -73,7 +76,20 @@ export const userLoginApi = (userData) => {
     });
 };
 
-//users/ada/name.json?auth=<ID_TOKEN>"
+export const getCurUserApi = (idToken) => {
+  setBaseUrl(baseUrl.AUTH);
+  setParams({ key: API_KEY });
+
+  return axios
+    .post(endPoint.GET_USER, { idToken })
+    .then(({ data }) => {
+      const { localId, email } = data.users[0];
+      return { localId, email };
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 
 export const addTransactionApi = ({
   transType,
