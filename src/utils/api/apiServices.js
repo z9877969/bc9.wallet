@@ -73,8 +73,16 @@ export const userLoginApi = (userData) => {
     });
 };
 
-export const addTransactionApi = ({ transType, transaction, localId }) => {
+//users/ada/name.json?auth=<ID_TOKEN>"
+
+export const addTransactionApi = ({
+  transType,
+  transaction,
+  localId,
+  idToken,
+}) => {
   setBaseUrl(baseUrl.DB);
+  setParams({ auth: idToken });
   return axios
     .post(
       "users/" + localId + "/transactions/" + transType + ".json",
@@ -86,11 +94,32 @@ export const addTransactionApi = ({ transType, transaction, localId }) => {
     });
 };
 
-export const getTransactions = ({ transType, localId }) => {
+export const getTransactions = ({ transType, localId, idToken }) => {
   setBaseUrl(baseUrl.DB);
+  setParams({ auth: idToken });
   return axios
     .get(`/users/${localId}/transactions/${transType}.json`)
     .then(({ data }) => updateDataObj(data))
+    .catch((err) => {
+      throw err;
+    });
+};
+
+export const editTransactionApi = ({
+  transType,
+  transaction,
+  localId,
+  idToken,
+  transId,
+}) => {
+  setBaseUrl(baseUrl.DB);
+  setParams({ auth: idToken });
+  return axios
+    .patch(
+      `/users/${localId}/transactions/${transType}/${transId}.json`,
+      transaction
+    )
+    .then(({ data }) => ({ id: transId, ...data }))
     .catch((err) => {
       throw err;
     });

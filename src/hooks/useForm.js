@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useForm = ({ initialState, handleClickCb, onSubmit }) => {
   const [data, setForm] = useState(initialState);
+
+  console.log("data :>> ", data);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,6 +19,10 @@ export const useForm = ({ initialState, handleClickCb, onSubmit }) => {
     e.preventDefault();
     onSubmit(data);
   };
+
+  useEffect(() => {
+    setForm(initialState);
+  }, [initialState]);
 
   return { data, handleChange, handleSetDataByClick, handleSubmit };
 };

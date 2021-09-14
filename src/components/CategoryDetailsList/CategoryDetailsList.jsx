@@ -8,7 +8,12 @@ const CategoryDetailsList = ({ detailsList }) => {
   return (
     <ul className={s.list}>
       {detailsList.map(({ id, ...detailsItem }) => (
-        <CategoryDetailsListItem {...detailsItem} key={id} className={s.item} />
+        <CategoryDetailsListItem
+          {...detailsItem}
+          id={id}
+          key={id}
+          className={s.item}
+        />
       ))}
     </ul>
   );

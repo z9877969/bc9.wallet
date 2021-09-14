@@ -1,4 +1,4 @@
-import { useMemo, lazy } from "react";
+import { useMemo, lazy , useEffect} from "react";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import shortid from "shortid";
@@ -7,18 +7,23 @@ import GoBackHeader from "../components/_share/GoBackHeader/GoBackHeader";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
 import dateApi from "../utils/withPeriods/classDataByPeriod";
 import { useForm } from "../hooks/useForm";
-import { addTransaction } from "../redux/transactions/transactionsOperation";
+import { addTransaction, editTransaction } from "../redux/transactions/transactionsOperation";
 import {
   addCostsCat,
   addIncomesCat,
 } from "../redux/categories/categories-actions";
-import { useEffect } from "react";
 import {
+  resetTransId,
   resetType,
   setCostsType,
   setIncomesType,
+  setTransId,
 } from "../redux/transactions/transactionsActions";
-import { getTranstype } from "../redux/transactions/transactionsSelectors";
+import {
+  getEditTransaction,
+  getTranstype,
+  getTransId,
+} from "../redux/transactions/transactionsSelectors";
 
 const CategoryListPage = lazy(() =>
   import("./CategoryListPage" /* webpackChunkName: "category-list-page"*/)
@@ -40,6 +45,8 @@ const TransactionPage = (props) => {
   const dispatch = useDispatch();
   const categoryList = useSelector((state) => state.categories);
   const transType = useSelector(getTranstype);
+  const transId = useSelector(getTransId);
+  const editingTransaction = useSelector(getEditTransaction);
 
   const handleAddCategory = ({ transType, category }) => {
     switch (transType) {
@@ -52,7 +59,10 @@ const TransactionPage = (props) => {
     }
   };
 
-  const initialState = useMemo(() => getInitialState(transType), []);
+  const initialState = useMemo(
+    () => (editingTransaction ? editingTransaction : getInitialState(transType)),
+    [editingTransaction, transType]
+  );
 
   const handleToggleCatList = (isGoBack) => {
     history.push(
@@ -69,26 +79,34 @@ const TransactionPage = (props) => {
     dispatch(addTransaction({ transType, transaction }));
   };
 
+  // console.log("initialState :>> ", initialState);
+
   const formik = useForm({
     initialState,
     handleClickCb: () => {
       handleToggleCatList();
     },
     onSubmit: (transaction) => {
-      handleAddTransaction(transaction);
+      transId
+        ? dispatch(editTransaction({ transType, transaction }))
+        : handleAddTransaction(transaction);
       history.push(history.location.state?.from || "/");
     },
   });
 
   useEffect(() => {
     const {
-      params: { transType },
+      params: { transType, transId },
     } = match;
     transType === "incomes"
       ? dispatch(setIncomesType())
       : dispatch(setCostsType());
+    transId && dispatch(setTransId(transId));
 
-    return () => dispatch(resetType());
+    return () => {
+      dispatch(resetType());
+      transId && dispatch(resetTransId());
+    };
   }, []);
 
   return (
@@ -103,9 +121,7 @@ const TransactionPage = (props) => {
               handleToggleCatList={handleToggleCatList}
               handleSetCategory={formik.handleSetDataByClick}
               handleAddCategory={handleAddCategory}
-              categoryList={
-                categoryList[transType + "Cat"]
-              }
+              categoryList={categoryList[transType + "Cat"]}
             />
           )}
         />
