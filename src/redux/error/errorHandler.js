@@ -1,7 +1,7 @@
 import { userRefesh } from "../auth/authOperations";
 import {
-    editCostsError,
-    editIncomesError,
+  editCostsError,
+  editIncomesError,
   getCostsError,
   getIncomesError,
 } from "../transactions/transactionsActions";
@@ -9,8 +9,7 @@ import {
 export const getError =
   ({ error, cb, data, errorType }) =>
   (dispatch) => {
-    console.log("error :>> ", error.code);
-    if (error.message.includes("code 401")) {
+    if (error.status === 401) {
       dispatch(userRefesh({ cb, data }));
     }
 

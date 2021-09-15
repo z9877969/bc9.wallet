@@ -30,6 +30,11 @@ const setParams = (params) => (axios.defaults.params = params);
 
 const setToken = (token) => (axios.defaults.params = { auth: token });
 
+const setErrorStatus = (err) => {
+  err.status = +err.message.split(" ").slice(-1);
+  return err;
+};
+
 export const userRegisterApi = (userData) => {
   setBaseUrl(baseUrl.AUTH);
   setParams({
@@ -50,7 +55,7 @@ export const userRegisterApi = (userData) => {
       };
     })
     .catch((err) => {
-      throw err;
+      throw setErrorStatus(err);
     });
 };
 
@@ -74,7 +79,7 @@ export const userLoginApi = (userData) => {
       };
     })
     .catch((err) => {
-      throw err;
+      throw setErrorStatus(err);
     });
 };
 
@@ -89,7 +94,7 @@ export const getCurUserApi = (idToken) => {
       return { localId, email };
     })
     .catch((err) => {
-      throw err;
+      throw setErrorStatus(err);
     });
 };
 // ?key=[API_KEY]&grant_type=refresh_token&refresh_token=[REFRESH_TOKEN]
@@ -112,7 +117,7 @@ export const userRefreshApi = (refreshToken) => {
       }) => ({ idToken, refreshToken, localId })
     )
     .catch((err) => {
-      throw err;
+      throw setErrorStatus(err);
     });
 };
 
@@ -131,15 +136,11 @@ export const addTransactionApi = ({
     )
     .then(({ data: { name } }) => ({ id: name, ...transaction }))
     .catch((err) => {
-      throw err;
+      throw setErrorStatus(err);
     });
 };
 
-export const getTransactions = ({
-  transType,
-  localId,
-  idToken,
-}) => {
+export const getTransactions = ({ transType, localId, idToken }) => {
   setBaseUrl(baseUrl.DB);
   setParams({ auth: idToken });
   return axios
@@ -147,7 +148,7 @@ export const getTransactions = ({
     .then(({ data }) => updateDataObj(data))
     .catch((err) => {
       console.log("err :>> ", err.message);
-      throw err;
+      throw setErrorStatus(err);
     });
 };
 
@@ -167,6 +168,6 @@ export const editTransactionApi = ({
     )
     .then(({ data }) => ({ id: transId, ...data }))
     .catch((err) => {
-      throw err;
+      throw setErrorStatus(err);
     });
 };
