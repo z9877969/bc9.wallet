@@ -7,8 +7,6 @@ import "./index.css";
 import App from "./components/App/App";
 import store, { persistor } from "./redux/store";
 
-import "./test";
-
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
