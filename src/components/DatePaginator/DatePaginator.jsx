@@ -1,30 +1,44 @@
-import LabelInput from '../_share/LabelInput/LabelInput';
-import s from './DatePaginator.module.scss';
-import sprite from '../../assets/icons/symbol-defs.svg';
-import dateApi from '../../utils/withPeriods/classDataByPeriod';
+import { useState } from "react";
+import DatePicker, { registerLocale } from "react-datepicker";
+import s from "./DatePaginator.module.scss";
+import sprite from "../../assets/icons/symbol-defs.svg";
+import dateApi from "../../utils/withPeriods/classDataByPeriod";
+import "react-datepicker/dist/react-datepicker.css";
+import ru from "date-fns/locale/ru";
+registerLocale("ru", ru);
 
-const DatePaginator = ({ onChangeDate, thouchedDate, touchedPeriod }) => {
+const DatePaginator = ({
+  startDate,
+  touchedPeriod,
+  handleChange,
+  handleNext,
+  handlePrev,
+}) => {
   const tochedInfo = dateApi.getDateOfPeriodStr({
-    date: thouchedDate,
+    date: startDate,
     period: touchedPeriod.name,
   });
+
   return (
     <div className={s.conteiner}>
-      <button className={s.btn} type="button">
+      <button onClick={handlePrev} className={s.btn} type="button">
         <svg className={s.svg}>
-          <use href={sprite + '#icon-cheveron-left'}></use>
+          <use href={sprite + "#icon-cheveron-left"}></use>
         </svg>
       </button>
-      <LabelInput
-        className={s.label}
-        type="date"
-        title={tochedInfo}
-        cbOnChange={onChangeDate}
-        value={thouchedDate}
-      />
-      <button className={s.btn} type="button">
+      <label>
+        <span>{tochedInfo}</span>
+        <DatePicker
+          selected={startDate}
+          locale="ru"
+          onSelect={handleChange}
+          onChange={handleChange}
+          className="date-paginator"
+        />
+      </label>
+      <button onClick={handleNext} className={s.btn} type="button">
         <svg className={s.svg}>
-          <use href={sprite + '#icon-cheveron-right'}></use>
+          <use href={sprite + "#icon-cheveron-right"}></use>
         </svg>
       </button>
     </div>

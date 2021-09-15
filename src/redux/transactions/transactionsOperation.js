@@ -3,6 +3,7 @@ import {
   editTransactionApi,
   getTransactions,
 } from "../../utils/api/apiServices";
+import { getError } from "../error/errorHandler";
 import {
   addCostsError,
   addCostsRequests,
@@ -69,7 +70,14 @@ export const getCosts = () => async (dispatch, getState) => {
 
     dispatch(getCostsSuccess(costs));
   } catch (error) {
-    dispatch(getCostsError(error));
+    dispatch(
+      getError({
+        error,
+        cb: getCosts,
+        data: null,
+        errorType: "getCostsError",
+      })
+    );
   }
 };
 
@@ -86,9 +94,18 @@ export const getIncomes = () => async (dispatch, getState) => {
     });
     dispatch(getIncomesSuccess(incomes));
   } catch (error) {
-    dispatch(getIncomesError(error));
+    console.log("error_dispatch :>> ", error);
+    dispatch(
+      getError({
+        error,
+        cb: getIncomes,
+        data: null,
+        errorType: "getIncomesError",
+      })
+    );
   }
 };
+//getIncomesError(error)
 
 export const editTransaction =
   ({ transType, transaction }) =>
@@ -114,7 +131,25 @@ export const editTransaction =
         : dispatch(editCostsSuccess(transactionData));
     } catch (error) {
       transType === "incomes"
-        ? dispatch(editIncomesError(error))
-        : dispatch(editCostsError(error));
+        ? dispatch(
+            getError({
+              error,
+              cb: editTransaction,
+              data: { transType, transaction },
+              errorType: "editIncomesError",
+            })
+          )
+        : dispatch(
+            getError({
+              error,
+              cb: editTransaction,
+              data: { transType, transaction },
+              errorType: "editCostsError",
+            })
+          );
+
+      // transType === "incomes"
+      //   ? dispatch(editIncomesError(error.message))
+      //   : dispatch(editCostsError(error));
     }
   };

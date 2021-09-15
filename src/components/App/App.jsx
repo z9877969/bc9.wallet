@@ -31,7 +31,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   const isAuth = useSelector(getIsAuthUser);
-  const idToken = useSelector(getIdToken)
+  const idToken = useSelector(getIdToken);
 
   useEffect(() => {
     idToken && dispatch(getCurUser());

@@ -1,30 +1,30 @@
-import moment from 'moment';
-import 'moment/locale/ru';
+import moment from "moment";
+import "moment/locale/ru";
 // import 'moment/locale/uk';
 
 class DataByPeriod {
   #dateFormat = {
-    simple: 'YYYY-MM-DD',
-    full: 'YYYY-MMMM-W',
-    curTime: 'hh:mm',
+    simple: "YYYY-MM-DD",
+    full: "YYYY-MMMM-WW",
+    curTime: "hh:mm",
   };
 
   #direction = {
-    RIGHT: 'right',
-    LEFT: 'left',
+    RIGHT: "right",
+    LEFT: "left",
   };
 
   #periodsTypes = {
-    year: 'year',
-    month: 'month',
-    week: 'week',
-    day: 'day',
+    year: "year",
+    month: "month",
+    week: "week",
+    day: "day",
   };
 
   #getPeriod = {
-    week: date => moment(date).week(),
-    year: (date = null) => this.splitDate(date)['year'],
-    month: (date = null) => this.splitDate(date)['month'],
+    week: (date) => moment(date).week(),
+    year: (date = null) => this.splitDate(date)["year"],
+    month: (date = null) => this.splitDate(date)["month"],
   };
 
   get dateFormat() {
@@ -52,12 +52,12 @@ class DataByPeriod {
 
   resetDate = () => moment().format(this.dateFormat.simple);
 
-  changeDateToDate = dateStr => moment(dateStr)._d;
+  changeDateToDate = (dateStr) => moment(dateStr)._d;
 
-  changeToCapitalize = str => str[0].toUpperCase() + str.slice(1);
+  changeToCapitalize = (str) => str[0].toUpperCase() + str.slice(1);
 
   splitDate = (date = null) => {
-    const [year, month, day] = (date || this.current).split('-');
+    const [year, month, day] = (date || this.current).split("-");
     return {
       year,
       month,
@@ -65,9 +65,10 @@ class DataByPeriod {
     };
   };
 
-  splitFullDate = date => {
-    const fullDate = moment(date).local('ru').format(this.dateFormat.full);
-    const [year, month, dayOfWeek] = fullDate.split('-');
+  splitFullDate = (date) => {
+    const fullDate = moment(date).local("ru").format(this.dateFormat.full);
+    const dayOfWeek = moment(date).isoWeekday();
+    const [year, month] = fullDate.split("-");
     return {
       year,
       month,
@@ -75,10 +76,10 @@ class DataByPeriod {
     };
   };
 
-  getWeekDay = (date) => moment(date).format('dd');
+  getWeekDay = (date) => moment(date).format("dd");
 
   getDataPerDay = (data, date) => {
-    return data.filter(transaction => transaction.date === date);
+    return data.filter((transaction) => transaction.date === date);
   };
 
   getDataPerWeek = (data, date) => {
@@ -87,7 +88,7 @@ class DataByPeriod {
     return data.filter(
       ({ date: dataDate }) =>
         this.getPeriod.year(dataDate) === periodYear &&
-        this.getPeriod.week(dataDate) === periodWeek,
+        this.getPeriod.week(dataDate) === periodWeek
     );
   };
 
@@ -107,16 +108,15 @@ class DataByPeriod {
     });
   };
 
+  // moment("2021-09-15").add(1, "years").format("YYYY-MM-DD")
   getUpdatingDate = (baseDate, method, periodType) =>
-    moment(baseDate)
-    [method](1, periodType + 's')
-      .format(this.dateFormat.simple);
+    moment(baseDate)[method](1, periodType.name + "s")._d;
 
-  getDataByCat = data => {
+  getDataByCat = (data) => {
     return data.reduce((acc, transaction) => {
       const { category: cat } = transaction;
       const sum = Number(transaction.sum);
-      const category = typeof cat === 'object' ? cat.name : cat;
+      const category = typeof cat === "object" ? cat.name : cat;
       if (!acc[category]) {
         acc[category] = { total: sum };
         acc[category] = {
@@ -131,21 +131,22 @@ class DataByPeriod {
     }, {});
   };
 
-  getDataListOfCategories = ({ data, date, period = 'all' }) => {
+  getDataListOfCategories = ({ data, date, period = "all" }) => {
     const { day, week, year, month } = this.periodsTypes;
+    const dateStr = moment(date).format("YYYY-MM-DD");
     let newData = [];
     switch (period) {
       case day:
-        newData = this.getDataPerDay(data, date);
+        newData = this.getDataPerDay(data, dateStr);
         break;
       case week:
-        newData = this.getDataPerWeek(data, date);
+        newData = this.getDataPerWeek(data, dateStr);
         break;
       case month:
-        newData = this.getDataPerMonth(data, date);
+        newData = this.getDataPerMonth(data, dateStr);
         break;
       case year:
-        newData = this.getDataPerYear(data, date);
+        newData = this.getDataPerYear(data, dateStr);
         break;
       default:
         newData = data;
@@ -162,14 +163,14 @@ class DataByPeriod {
       case this.periodsTypes.week:
         const { dayOfWeek } = this.splitFullDate(date);
         const weekStart = moment(date)
-          .subtract(dayOfWeek - 1, 'days')
-          .format('LL');
+          .subtract(dayOfWeek - 1, "days")
+          .format("LL");
         const weekEnd = moment(date)
-          .add(7 - dayOfWeek, 'days')
-          .format('LL');
+          .add(7 - dayOfWeek, "days")
+          .format("LL");
         return `${weekStart} - ${weekEnd}`;
       case this.periodsTypes.day:
-        return moment(date).format('LL');
+        return moment(date).format("LL");
       case this.periodsTypes.year:
         return this.splitFullDate(date).year;
       default:
@@ -177,22 +178,16 @@ class DataByPeriod {
     }
   };
 
-  setUpdatingDate = (periodType, updatingDirection) => {
+  setUpdatingDate = (upDate, periodType, updatingDirection) => {
     const method =
       updatingDirection === this.direction.RIGHT
-        ? 'add'
+        ? "add"
         : updatingDirection === this.direction.LEFT
-          ? 'subtract'
-          : null;
+        ? "subtract"
+        : null;
     if (!method) return;
-    this.pointOfPeriod += 1;
-    this.updatingDate = this.getUpdatingDate(
-      this.updatingDate,
-      method,
-      periodType,
-    );
-    console.log('this.updatingDate :>> ', this.updatingDate);
-    this.pointOfPeriod = 0;
+    const updatedDate = this.getUpdatingDate(upDate, method, periodType);
+    return updatedDate;
   };
 }
 

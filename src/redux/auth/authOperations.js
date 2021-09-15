@@ -1,6 +1,7 @@
 import {
   getCurUserApi,
   userLoginApi,
+  userRefreshApi,
   userRegisterApi,
 } from "../../utils/api/apiServices";
 import {
@@ -13,6 +14,7 @@ import {
   getCurUserRequest,
   getCurUserSuccess,
   getCurUserError,
+  userRefreshRequest,
 } from "./authActions";
 
 export const userRegister = (userData) => (dispatch) => {
@@ -40,3 +42,18 @@ export const getCurUser = () => (dispatch, getState) => {
     .then((userRes) => dispatch(getCurUserSuccess(userRes)))
     .catch((err) => dispatch(getCurUserError(err)));
 };
+
+export const userRefesh =
+  ({ cb, data }) =>
+  (dispatch, getState) => {
+    dispatch(userRefreshRequest());
+
+    const { refreshToken, idToken } = getState().auth.user;
+
+    userRefreshApi(refreshToken)
+      .then((userData) => dispatch(userRefesh(userData)))
+      .then(() =>
+        cb && data ? dispatch(cb(data)) : cb && !data ? dispatch(cb()) : null
+      )
+      .catch((err) => console.log(err));
+  };

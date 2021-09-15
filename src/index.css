@@ -38,3 +38,7 @@ ul {
 button {
   cursor: pointer;
 }
+
+.date-paginator {
+  display: none;
+}

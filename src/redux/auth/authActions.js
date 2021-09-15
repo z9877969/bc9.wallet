@@ -12,4 +12,8 @@ export const getCurUserRequest = createAction("auth/getCurUserRequest");
 export const getCurUserSuccess = createAction("auth/getCurUserSuccess");
 export const getCurUserError = createAction("auth/getCurUserError");
 
+export const userRefreshRequest = createAction("auth/userRefreshRequest");
+export const userRefreshSuccess = createAction("auth/userRefreshSuccess");
+export const userRefreshError = createAction("auth/userRefreshError");
+
 export const userLogout = createAction("auth/userLogoyt");

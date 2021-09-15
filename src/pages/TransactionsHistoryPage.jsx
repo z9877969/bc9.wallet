@@ -1,12 +1,6 @@
-import { useState, lazy } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
-import {
-  useHistory,
-  useParams,
-  Route,
-  Switch,
-  useRouteMatch,
-} from "react-router-dom";
+import { useEffect, useState, lazy } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, Route, Switch, useRouteMatch } from "react-router-dom";
 import DatePaginator from "../components/DatePaginator/DatePaginator";
 import HistoryTable from "../components/HistoryTable/HistoryTable";
 import GoBackHeader from "../components/_share/GoBackHeader/GoBackHeader";
@@ -15,18 +9,18 @@ import HistoryHeaderBtns from "../components/HistoryHeaderBtns/HistoryHeaderBtns
 import MenuList from "../components/MenuList/MenuList";
 import periodList from "../assets/periodList.json";
 import dateApi from "../utils/withPeriods/classDataByPeriod";
+import { useDate } from "../hooks/useDate";
 import {
   getCurTransactions,
   getTransactions,
 } from "../redux/transactions/transactionsSelectors";
-import { useEffect } from "react";
 import {
   resetType,
   setCostsType,
   setIncomesType,
 } from "../redux/transactions/transactionsActions";
-import { getTouchedPeriod } from "../redux/history/historySelector";
 import { setTouchedPeriod } from "../redux/history/historyActions";
+
 const CategoryDetailsList = lazy(() =>
   import(
     "../components/CategoryDetailsList/CategoryDetailsList" /* webpackChunkName: "category-details-list"*/
@@ -40,9 +34,9 @@ const TransactionsHistoryPage = () => {
 
   const curTransactions = useSelector(getCurTransactions);
   const [isOpenPeriodList, setIsOpenPeriodList] = useState(false);
-  const touchedPeriod = useSelector(getTouchedPeriod);
-  const [thouchedDate, setThouchedDate] = useState(dateApi.current);
   const [categoryDetailsName, setCategoryDetailsName] = useState("");
+
+  const date = useDate();
 
   const onOpenCategoryDetails = (category) => {
     const nextLocation = {
@@ -60,21 +54,16 @@ const TransactionsHistoryPage = () => {
   };
 
   const onChangeTouchedPeriod = (periodObj) => {
-    dispatch(setTouchedPeriod(periodObj));
+    date.handleChangePeriod(periodObj);
     onTogglePeriodList();
-  };
-
-  const onChangeTouchedDate = (e) => {
-    const { value } = e.target;
-    setThouchedDate(value);
   };
 
   const allSum = curTransactions.reduce((acc, { sum }) => acc + Number(sum), 0);
 
   const filtredCatTrans = dateApi.getDataListOfCategories({
     data: curTransactions,
-    date: thouchedDate,
-    period: touchedPeriod.name,
+    date: date.startDate,
+    period: date.touchedPeriod.name,
   });
 
   useEffect(() => {
@@ -98,7 +87,7 @@ const TransactionsHistoryPage = () => {
           <GoBackHeader>
             <HistoryHeaderBtns
               onOpenPeriodList={onTogglePeriodList}
-              touchedPeriodTitle={touchedPeriod.title}
+              touchedPeriodTitle={date.touchedPeriod.title}
             />
             {isOpenPeriodList && (
               <MenuList
@@ -107,11 +96,7 @@ const TransactionsHistoryPage = () => {
               />
             )}
           </GoBackHeader>
-          <DatePaginator
-            onChangeDate={onChangeTouchedDate}
-            thouchedDate={thouchedDate}
-            touchedPeriod={touchedPeriod}
-          />
+          <DatePaginator {...date} />
           <HistoryTable
             allSum={allSum}
             // allSum="0"
@@ -123,10 +108,5 @@ const TransactionsHistoryPage = () => {
     </BaseSection>
   );
 };
-
-// const mapStateToProps = (state) => ({
-//   costs: state.transactions.costs,
-//   incomes: state.transactions.incomes,
-// });
 
 export default TransactionsHistoryPage;

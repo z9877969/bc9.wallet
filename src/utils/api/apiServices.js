@@ -15,12 +15,14 @@ const API_KEY = "AIzaSyCDoK_rPVNuzMuGqXkXuMfqv8h_fAH2ETs";
 const baseUrl = {
   AUTH: "https://identitytoolkit.googleapis.com/v1/",
   DB: "https://bootcamp9-ad563-default-rtdb.europe-west1.firebasedatabase.app",
+  REFRESH: "https://securetoken.googleapis.com/v1",
 };
 
 const endPoint = {
   REGISTER: "accounts:signUp",
   LOGIN: "accounts:signInWithPassword",
   GET_USER: "accounts:lookup",
+  REFRESH: "token",
 };
 
 const setBaseUrl = (url) => (axios.defaults.baseURL = url);
@@ -90,6 +92,29 @@ export const getCurUserApi = (idToken) => {
       throw err;
     });
 };
+// ?key=[API_KEY]&grant_type=refresh_token&refresh_token=[REFRESH_TOKEN]
+export const userRefreshApi = (refreshToken) => {
+  setBaseUrl(baseUrl.REFRESH);
+  setParams({ key: API_KEY });
+  return axios
+    .post(endPoint.REFRESH, {
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+    })
+    .then(({ data }) => {
+      return data;
+    })
+    .then(
+      ({
+        id_token: idToken,
+        refresh_token: refreshToken,
+        user_id: localId,
+      }) => ({ idToken, refreshToken, localId })
+    )
+    .catch((err) => {
+      throw err;
+    });
+};
 
 export const addTransactionApi = ({
   transType,
@@ -110,13 +135,18 @@ export const addTransactionApi = ({
     });
 };
 
-export const getTransactions = ({ transType, localId, idToken }) => {
+export const getTransactions = ({
+  transType,
+  localId,
+  idToken,
+}) => {
   setBaseUrl(baseUrl.DB);
   setParams({ auth: idToken });
   return axios
     .get(`/users/${localId}/transactions/${transType}.json`)
     .then(({ data }) => updateDataObj(data))
     .catch((err) => {
+      console.log("err :>> ", err.message);
       throw err;
     });
 };
